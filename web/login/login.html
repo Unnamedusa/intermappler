@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterMappler - Sistema de Acceso Seguro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Roboto+Mono:wght@300;400;500;700&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+</head>
+<body>
+    <!-- Fondo de partículas -->
+    <div id="login-particles"></div>
+    
+    <!-- Container principal -->
+    <div class="login-container">
+        <!-- Logo y título -->
+        <div class="login-header">
+            <div class="logo-wrapper">
+                <div class="logo-hologram">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <div class="hologram-glow"></div>
+                </div>
+                <h1 class="system-title">
+                    <span class="title-gradient">INTERMAPPLER</span>
+                </h1>
+                <p class="system-subtitle">
+                    <span class="typing-text">Sistema de Mapeo Inteligente Global</span>
+                </p>
+            </div>
+            
+            <!-- Selector de modo -->
+            <div class="mode-selector">
+                <div class="mode-buttons">
+                    <button class="mode-btn active" data-mode="login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Iniciar Sesión</span>
+                    </button>
+                    <button class="mode-btn" data-mode="public">
+                        <i class="fas fa-globe-americas"></i>
+                        <span>Acceso Público</span>
+                    </button>
+                    <button class="mode-btn" data-mode="info">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Información</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de Login (modo por defecto) -->
+        <div class="login-panel active" id="login-panel">
+            <div class="panel-header">
+                <h2><i class="fas fa-user-shield"></i> Acceso Seguro</h2>
+                <p class="security-level">
+                    <span class="security-badge level-3">Nivel 3 Encriptación</span>
+                </p>
+            </div>
+            
+            <form id="login-form" class="login-form">
+                <!-- Selector de tipo de usuario -->
+                <div class="role-selector">
+                    <label for="user-type">
+                        <i class="fas fa-users-cog"></i> Tipo de Usuario
+                    </label>
+                    <select id="user-type" name="userType" required>
+                        <option value="">-- Seleccione su rol --</option>
+                        <option value="MAP_ENGINEER">👑 Ingeniero de Mapa</option>
+                        <option value="ADMINISTRATOR">🛡️ Administrador</option>
+                        <option value="INTELLIGENCE">🕵️‍♂️ Inteligencia</option>
+                        <option value="MILITARY">🎖️ Militar</option>
+                        <option value="POLICE">👮‍♀️ Policía</option>
+                        <option value="SPECIALIST">🎓 Especialista</option>
+                    </select>
+                </div>
+
+                <!-- Subrol para especialistas -->
+                <div class="subrole-selector" id="subrole-container" style="display: none;">
+                    <label for="subrole">
+                        <i class="fas fa-user-tag"></i> Especialización
+                    </label>
+                    <select id="subrole" name="subrole">
+                        <option value="">-- Seleccione especialización --</option>
+                        <option value="PERIODISTA">📰 Periodista</option>
+                        <option value="ASTROLOGO">🔮 Astrólogo</option>
+                        <option value="ASTRONOMO">🌌 Astrónomo</option>
+                        <option value="METEOROLOGO">⛈️ Meteorólogo</option>
+                        <option value="GEOLOGO">⛰️ Geólogo</option>
+                        <option value="SOCIOLOGO">👥 Sociólogo</option>
+                    </select>
+                </div>
+
+                <!-- Credenciales -->
+                <div class="credentials-section">
+                    <div class="input-group">
+                        <label for="username">
+                            <i class="fas fa-user"></i> Usuario
+                        </label>
+                        <div class="input-with-icon">
+                            <input type="text" 
+                                   id="username" 
+                                   name="username" 
+                                   placeholder="Ingrese su usuario" 
+                                   required
+                                   autocomplete="username">
+                            <div class="input-status"></div>
+                        </div>
+                        <div class="demo-users-hint">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Demo: engineer_alpha, admin_nova, intel_shadow, etc.</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">
+                            <i class="fas fa-key"></i> Contraseña
+                        </label>
+                        <div class="input-with-icon">
+                            <input type="password" 
+                                   id="password" 
+                                   name="password" 
+                                   placeholder="Ingrese su contraseña" 
+                                   required
+                                   autocomplete="current-password">
+                            <button type="button" class="toggle-password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-bar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recordar sesión y seguridad -->
+                <div class="login-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="remember-me" name="rememberMe">
+                        <span class="checkmark"></span>
+                        <span>Recordar esta sesión (30 min)</span>
+                    </label>
+                    
+                    <a href="#" class="forgot-link" id="forgot-password">
+                        <i class="fas fa-question-circle"></i>
+                        ¿Problemas para acceder?
+                    </a>
+                </div>
+
+                <!-- Botón de login -->
+                <button type="submit" class="login-btn" id="submit-login">
+                    <span class="btn-text">Iniciar Sesión Segura</span>
+                    <span class="btn-loader">
+                        <div class="spinner"></div>
+                    </span>
+                    <i class="fas fa-fingerprint"></i>
+                </button>
+
+                <!-- Verificación de seguridad adicional -->
+                <div class="security-verification">
+                    <div class="verification-step" id="verification-1">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Verificando identidad...</span>
+                    </div>
+                    <div class="verification-step" id="verification-2">
+                        <i class="fas fa-lock"></i>
+                        <span>Encriptando conexión...</span>
+                    </div>
+                    <div class="verification-step" id="verification-3">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Cargando permisos...</span>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Información de seguridad -->
+            <div class="security-info">
+                <div class="info-item">
+                    <i class="fas fa-layer-group"></i>
+                    <span>3 Capas de Encriptación</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-history"></i>
+                    <span>Sesión de 30 minutos</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-user-clock"></i>
+                    <span>7 Tipos de Acceso</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de Acceso Público -->
+        <div class="login-panel" id="public-panel">
+            <div class="panel-header">
+                <h2><i class="fas fa-globe-americas"></i> Acceso Público</h2>
+                <p class="access-description">
+                    Mapa en tiempo real con información de emergencia para salvar vidas
+                </p>
+            </div>
+            
+            <div class="public-access-content">
+                <div class="public-features">
+                    <div class="feature-card">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Alertas de Emergencia</h3>
+                        <p>Información en tiempo real sobre desastres naturales</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-cloud-sun-rain"></i>
+                        <h3>Pronóstico Meteorológico</h3>
+                        <p>Datos climáticos actualizados cada 15 minutos</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-ambulance"></i>
+                        <h3>Servicios de Emergencia</h3>
+                        <p>Localización de hospitales y centros de ayuda</p>
+                    </div>
+                </div>
+                
+                <button class="public-access-btn" id="enter-public">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>Acceder al Mapa Público</span>
+                </button>
+                
+                <p class="public-note">
+                    <i class="fas fa-info-circle"></i>
+                    El acceso público no requiere registro. Los datos son limitados para protección de la privacidad.
+                </p>
+            </div>
+        </div>
+
+        <!-- Panel de Información -->
+        <div class="login-panel" id="info-panel">
+            <div class="panel-header">
+                <h2><i class="fas fa-info-circle"></i> Sobre InterMappler</h2>
+            </div>
+            
+            <div class="info-content">
+                <div class="system-description">
+                    <h3><i class="fas fa-satellite"></i> Sistema de Mapeo Inteligente</h3>
+                    <p>
+                        InterMappler es una plataforma avanzada de mapeo en tiempo real que proporciona 
+                        diferentes niveles de acceso según el rol del usuario, desde información pública 
+                        de emergencia hasta datos estratégicos clasificados.
+                    </p>
+                </div>
+                
+                <div class="roles-hierarchy">
+                    <h4><i class="fas fa-sitemap"></i> Jerarquía de Roles</h4>
+                    <div class="hierarchy-visualization">
+                        <!-- Se generará dinámicamente con JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="security-features">
+                    <h4><i class="fas fa-shield-alt"></i> Características de Seguridad</h4>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Encriptación de 3 capas</li>
+                        <li><i class="fas fa-check-circle"></i> Sistema anti-hacker Sneaker</li>
+                        <li><i class="fas fa-check-circle"></i> Máquina Enigma modernizada</li>
+                        <li><i class="fas fa-check-circle"></i> Maths cuánticos y fractales</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer del login -->
+        <div class="login-footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-lock"></i> Seguridad</h4>
+                    <p>Todas las conexiones están encriptadas con SSL/TLS 1.3</p>
+                </div>
+                <div class="footer-section">
+                    <h4><i class="fas fa-clock"></i> Disponibilidad</h4>
+                    <p>Sistema operativo 24/7 con 99.9% uptime</p>
+                </div>
+                <div class="footer-section">
+                    <h4><i class="fas fa-headset"></i> Soporte</h4>
+                    <p>Contacto: support@intermappler.org</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2024 InterMappler. Todos los derechos reservados.</p>
+                <p class="version">v3.14.0 | Build: #20240115.3</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de recuperación -->
+    <div class="modal" id="recovery-modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-key"></i> Recuperación de Acceso</h3>
+            <form id="recovery-form">
+                <input type="email" 
+                       placeholder="Email registrado" 
+                       required
+                       id="recovery-email">
+                <button type="submit" class="modal-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    Enviar Instrucciones
+                </button>
+            </form>
+            <button class="modal-close" id="close-recovery">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>
