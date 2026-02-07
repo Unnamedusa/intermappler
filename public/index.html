@@ -3,191 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servidor JSON - Railway</title>
+    <title>HELLO WORLD!!! - API Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <div class="logo">
-                <i class="fas fa-server"></i>
-                <h1>JSON Server API</h1>
+    <!-- Fondo de partículas -->
+    <div id="particles-js"></div>
+
+    <!-- Container principal -->
+    <div class="cyber-container">
+        <!-- Header con efecto neón -->
+        <header class="cyber-header">
+            <div class="neon-border"></div>
+            <div class="matrix-text"></div>
+            
+            <div class="logo-container">
+                <div class="hologram-effect">
+                    <div class="neon-text" id="main-title">
+                        <span class="letter">H</span>
+                        <span class="letter">E</span>
+                        <span class="letter">L</span>
+                        <span class="letter">L</span>
+                        <span class="letter">O</span>
+                        <span class="letter space"></span>
+                        <span class="letter">W</span>
+                        <span class="letter">O</span>
+                        <span class="letter">R</span>
+                        <span class="letter">L</span>
+                        <span class="letter">D</span>
+                        <span class="letter">!</span>
+                        <span class="letter">!</span>
+                        <span class="letter">!</span>
+                    </div>
+                </div>
+                
+                <div class="subtitle-container">
+                    <div class="scan-line"></div>
+                    <p class="cyber-subtitle">
+                        <span class="blink">█</span> CYBER API CONTROL PANEL 
+                        <span class="version">v3.14</span>
+                    </p>
+                </div>
             </div>
-            <p class="subtitle">Servidor REST desplegado en Railway</p>
+
+            <!-- Menú principal -->
+            <nav class="cyber-menu">
+                <ul class="menu-grid">
+                    <li class="menu-item active" data-tab="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                        <div class="menu-indicator"></div>
+                    </li>
+                    <li class="menu-item" data-tab="api-explorer">
+                        <i class="fas fa-code"></i>
+                        <span>API Explorer</span>
+                        <div class="menu-indicator"></div>
+                    </li>
+                    <li class="menu-item" data-tab="data-manager">
+                        <i class="fas fa-database"></i>
+                        <span>Data Manager</span>
+                        <div class="menu-indicator"></div>
+                    </li>
+                    <li class="menu-item" data-tab="monitoring">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Monitoring</span>
+                        <div class="menu-indicator"></div>
+                    </li>
+                    <li class="menu-item" data-tab="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                        <div class="menu-indicator"></div>
+                    </li>
+                    <li class="menu-item" data-tab="terminal">
+                        <i class="fas fa-terminal"></i>
+                        <span>Terminal</span>
+                        <div class="menu-indicator"></div>
+                    </li>
+                </ul>
+            </nav>
         </header>
 
-        <main class="main-content">
-            <section class="info-section">
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-info-circle"></i>
-                        <h2>Información del Servidor</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="status-indicator">
-                            <span class="status-dot active"></span>
-                            <span>Estado: <strong id="server-status">Verificando...</strong></span>
+        <!-- Contenido principal -->
+        <main class="cyber-main">
+            <!-- Panel de control (Dashboard) -->
+            <section class="tab-content active" id="dashboard">
+                <div class="cyber-grid">
+                    <!-- Status Cards -->
+                    <div class="cyber-card status-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-server"></i> SERVER STATUS</h3>
+                            <div class="pulse-animation"></div>
                         </div>
-                        <div class="server-info">
-                            <p><i class="fas fa-clock"></i> Hora del servidor: <span id="server-time">--:--:--</span></p>
-                            <p><i class="fas fa-database"></i> Datos almacenados: <span id="data-count">0</span> registros</p>
-                            <p><i class="fas fa-globe"></i> Entorno: <span id="environment">--</span></p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="endpoints-section">
-                <h2><i class="fas fa-plug"></i> Endpoints Disponibles</h2>
-                
-                <div class="endpoints-grid">
-                    <!-- GET /api/datos -->
-                    <div class="endpoint-card">
-                        <div class="method get">GET</div>
-                        <h3>/api/datos</h3>
-                        <p>Obtener todos los datos almacenados</p>
-                        <button class="btn test-btn" onclick="testEndpoint('GET', '/api/datos')">
-                            <i class="fas fa-play"></i> Probar
-                        </button>
-                    </div>
-
-                    <!-- GET /api/datos/:id -->
-                    <div class="endpoint-card">
-                        <div class="method get">GET</div>
-                        <h3>/api/datos/:id</h3>
-                        <p>Obtener un dato específico por ID</p>
-                        <div class="input-group">
-                            <input type="number" id="data-id" placeholder="ID del dato" min="1">
-                            <button class="btn test-btn" onclick="testGetById()">
-                                <i class="fas fa-search"></i> Buscar
-                            </button>
+                        <div class="card-body">
+                            <div class="status-grid">
+                                <div class="status-item">
+                                    <div class="status-label">API Status</div>
+                                    <div class="status-value active" id="api-status">ONLINE</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-label">Uptime</div>
+                                    <div class="status-value" id="server-uptime">00:00:00</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-label">Memory</div>
+                                    <div class="status-value" id="memory-usage">--</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-label">Requests</div>
+                                    <div class="status-value" id="request-count">0</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- POST /api/datos -->
-                    <div class="endpoint-card">
-                        <div class="method post">POST</div>
-                        <h3>/api/datos</h3>
-                        <p>Crear un nuevo registro</p>
-                        <button class="btn test-btn" onclick="showCreateForm()">
-                            <i class="fas fa-plus"></i> Crear Nuevo
-                        </button>
-                    </div>
-
-                    <!-- PUT /api/datos/:id -->
-                    <div class="endpoint-card">
-                        <div class="method put">PUT</div>
-                        <h3>/api/datos/:id</h3>
-                        <p>Actualizar un registro existente</p>
-                        <button class="btn test-btn" onclick="showUpdateForm()">
-                            <i class="fas fa-edit"></i> Actualizar
-                        </button>
-                    </div>
-
-                    <!-- DELETE /api/datos/:id -->
-                    <div class="endpoint-card">
-                        <div class="method delete">DELETE</div>
-                        <h3>/api/datos/:id</h3>
-                        <p>Eliminar un registro</p>
-                        <div class="input-group">
-                            <input type="number" id="delete-id" placeholder="ID a eliminar" min="1">
-                            <button class="btn delete-btn" onclick="deleteData()">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
+                    <!-- System Info -->
+                    <div class="cyber-card system-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-microchip"></i> SYSTEM INFO</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="info-line">
+                                <span class="info-label">Environment:</span>
+                                <span class="info-value terminal-text" id="env-info">LOADING...</span>
+                            </div>
+                            <div class="info-line">
+                                <span class="info-label">Node.js:</span>
+                                <span class="info-value" id="node-version">--</span>
+                            </div>
+                            <div class="info-line">
+                                <span class="info-label">Port:</span>
+                                <span class="info-value" id="server-port">--</span>
+                            </div>
+                            <div class="info-line">
+                                <span class="info-label">Host:</span>
+                                <span class="info-value terminal-text" id="server-host">--</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- GET /api/estado -->
-                    <div class="endpoint-card">
-                        <div class="method get">GET</div>
-                        <h3>/api/estado</h3>
-                        <p>Verificar estado del servidor</p>
-                        <button class="btn test-btn" onclick="testEndpoint('GET', '/api/estado')">
-                            <i class="fas fa-heartbeat"></i> Estado
-                        </button>
+                    <!-- Quick Actions -->
+                    <div class="cyber-card actions-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-bolt"></i> QUICK ACTIONS</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="action-buttons">
+                                <button class="cyber-btn primary" onclick="testAllEndpoints()">
+                                    <i class="fas fa-play"></i> Test All APIs
+                                </button>
+                                <button class="cyber-btn success" onclick="refreshData()">
+                                    <i class="fas fa-sync"></i> Refresh Data
+                                </button>
+                                <button class="cyber-btn warning" onclick="clearLogs()">
+                                    <i class="fas fa-trash"></i> Clear Logs
+                                </button>
+                                <button class="cyber-btn danger" onclick="restartSimulation()">
+                                    <i class="fas fa-power-off"></i> Restart
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- GET /api/saludo -->
-                    <div class="endpoint-card">
-                        <div class="method get">GET</div>
-                        <h3>/api/saludo</h3>
-                        <p>Saludo personalizado</p>
-                        <div class="input-group">
-                            <input type="text" id="nombre" placeholder="Tu nombre">
-                            <button class="btn test-btn" onclick="testSaludo()">
-                                <i class="fas fa-hand-wave"></i> Saludar
-                            </button>
+                    <!-- Live Data Feed -->
+                    <div class="cyber-card data-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-stream"></i> LIVE DATA FEED</h3>
+                            <div class="live-indicator">
+                                <span class="blink">●</span> LIVE
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="data-feed" id="data-feed">
+                                <div class="feed-item">
+                                    <span class="feed-time">[12:34:56]</span>
+                                    <span class="feed-message">System initialized...</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section class="response-section">
-                <h2><i class="fas fa-code"></i> Respuesta del Servidor</h2>
-                <div class="response-container">
-                    <div class="response-header">
-                        <span id="response-status">Esperando solicitud...</span>
-                        <button class="btn clear-btn" onclick="clearResponse()">
-                            <i class="fas fa-trash"></i> Limpiar
-                        </button>
+            <!-- API Explorer -->
+            <section class="tab-content" id="api-explorer">
+                <div class="explorer-container">
+                    <div class="request-panel">
+                        <h3><i class="fas fa-paper-plane"></i> REQUEST BUILDER</h3>
+                        <div class="request-form">
+                            <div class="method-selector">
+                                <button class="method-btn get active" data-method="GET">GET</button>
+                                <button class="method-btn post" data-method="POST">POST</button>
+                                <button class="method-btn put" data-method="PUT">PUT</button>
+                                <button class="method-btn delete" data-method="DELETE">DELETE</button>
+                            </div>
+                            <div class="url-input">
+                                <span class="url-prefix">/api/</span>
+                                <input type="text" id="endpoint-path" placeholder="datos" value="datos">
+                            </div>
+                            <div class="request-options">
+                                <textarea id="request-body" placeholder='{"key": "value"}'></textarea>
+                                <button class="cyber-btn primary send-btn" onclick="sendCustomRequest()">
+                                    <i class="fas fa-rocket"></i> SEND REQUEST
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <pre id="response-output">{"mensaje": "Haz clic en cualquier endpoint para probar la API"}</pre>
+                    <div class="response-panel">
+                        <h3><i class="fas fa-code"></i> RESPONSE</h3>
+                        <div class="response-display">
+                            <div class="response-header">
+                                <span class="status-badge" id="response-status">READY</span>
+                                <span class="response-time" id="response-time">-- ms</span>
+                            </div>
+                            <pre id="response-content">{
+    "message": "Build and send a request"
+}</pre>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- Modal para crear datos -->
-            <div id="create-modal" class="modal">
-                <div class="modal-content">
-                    <h3><i class="fas fa-plus-circle"></i> Crear Nuevo Dato</h3>
-                    <form id="create-form">
-                        <input type="text" id="create-nombre" placeholder="Nombre" required>
-                        <select id="create-activo" required>
-                            <option value="">Selecciona estado</option>
-                            <option value="true">Activo</option>
-                            <option value="false">Inactivo</option>
-                        </select>
-                        <textarea id="create-descripcion" placeholder="Descripción (opcional)" rows="3"></textarea>
-                        <div class="modal-buttons">
-                            <button type="submit" class="btn submit-btn">Crear</button>
-                            <button type="button" class="btn cancel-btn" onclick="closeModal()">Cancelar</button>
+            <!-- Data Manager -->
+            <section class="tab-content" id="data-manager">
+                <div class="data-manager-container">
+                    <div class="data-tools">
+                        <h3><i class="fas fa-database"></i> DATA MANAGER</h3>
+                        <div class="toolbar">
+                            <button class="cyber-btn" onclick="loadAllData()">
+                                <i class="fas fa-download"></i> Load All
+                            </button>
+                            <button class="cyber-btn success" onclick="createDataModal()">
+                                <i class="fas fa-plus"></i> Create New
+                            </button>
+                            <button class="cyber-btn warning" onclick="exportData()">
+                                <i class="fas fa-file-export"></i> Export
+                            </button>
+                            <button class="cyber-btn danger" onclick="clearAllData()">
+                                <i class="fas fa-broom"></i> Clear All
+                            </button>
                         </div>
-                    </form>
+                    </div>
+                    <div class="data-table-container">
+                        <table class="cyber-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="data-table">
+                                <!-- Datos cargados dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Modal para actualizar datos -->
-            <div id="update-modal" class="modal">
-                <div class="modal-content">
-                    <h3><i class="fas fa-edit"></i> Actualizar Dato</h3>
-                    <form id="update-form">
-                        <input type="number" id="update-id" placeholder="ID del dato a actualizar" required min="1">
-                        <input type="text" id="update-nombre" placeholder="Nuevo nombre">
-                        <select id="update-activo">
-                            <option value="">Estado (opcional)</option>
-                            <option value="true">Activo</option>
-                            <option value="false">Inactivo</option>
-                        </select>
-                        <div class="modal-buttons">
-                            <button type="submit" class="btn submit-btn">Actualizar</button>
-                            <button type="button" class="btn cancel-btn" onclick="closeModal()">Cancelar</button>
+            <!-- Monitoring -->
+            <section class="tab-content" id="monitoring">
+                <div class="monitoring-container">
+                    <h3><i class="fas fa-chart-network"></i> REAL-TIME MONITORING</h3>
+                    <div class="charts-grid">
+                        <div class="chart-container">
+                            <canvas id="requestsChart"></canvas>
                         </div>
-                    </form>
+                        <div class="chart-container">
+                            <canvas id="responseTimeChart"></canvas>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value" id="total-requests">0</div>
+                                <div class="stat-label">Total Requests</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="avg-response">0ms</div>
+                                <div class="stat-label">Avg Response</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="error-rate">0%</div>
+                                <div class="stat-label">Error Rate</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- Terminal -->
+            <section class="tab-content" id="terminal">
+                <div class="terminal-container">
+                    <div class="terminal-header">
+                        <div class="terminal-title">
+                            <i class="fas fa-terminal"></i>
+                            <span>SYSTEM TERMINAL</span>
+                            <span class="terminal-badge">root@api-server:~</span>
+                        </div>
+                        <div class="terminal-controls">
+                            <button class="term-btn" onclick="clearTerminal()">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="term-btn" onclick="copyTerminal()">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-output" id="terminal-output">
+                            <div class="term-line">Welcome to HELLO WORLD!!! API Terminal</div>
+                            <div class="term-line">Type 'help' for available commands</div>
+                            <div class="term-line">System initialized at <span id="init-time"></span></div>
+                        </div>
+                        <div class="terminal-input">
+                            <span class="prompt">$</span>
+                            <input type="text" id="terminal-input" placeholder="Enter command..." autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
 
-        <footer class="footer">
-            <p>🚂 Desplegado en <strong>Railway</strong> | Node.js JSON Server</p>
-            <p class="footer-links">
-                <a href="/api/docs" target="_blank"><i class="fas fa-book"></i> Documentación</a>
-                <a href="https://railway.app" target="_blank"><i class="fas fa-external-link-alt"></i> Railway</a>
-                <a href="https://github.com" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-            </p>
+        <!-- Footer -->
+        <footer class="cyber-footer">
+            <div class="footer-grid">
+                <div class="footer-item">
+                    <div class="connection-status">
+                        <span class="status-dot connected"></span>
+                        <span>CONNECTED TO RAILWAY</span>
+                    </div>
+                </div>
+                <div class="footer-item">
+                    <div class="clock" id="system-clock">--:--:--</div>
+                </div>
+                <div class="footer-item">
+                    <div class="cpu-usage">
+                        <i class="fas fa-microchip"></i>
+                        <span>CPU: <span id="cpu-load">--%</span></span>
+                    </div>
+                </div>
+            </div>
         </footer>
     </div>
 
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="base.js"></script>
 </body>
 </html>
