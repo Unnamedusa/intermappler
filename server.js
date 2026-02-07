@@ -14,11 +14,6 @@ app.use(express.json());
 // Servir archivos estáticos desde la carpeta public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Redirigir / a la interfaz web
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
 // Datos de ejemplo (simula una base de datos JSON)
 let datos = [
     { 
@@ -103,6 +98,12 @@ app.use((req, res, next) => {
     };
     
     next();
+});
+
+// IMPORTANTE: Ruta para la interfaz web debe estar ANTES de las rutas API
+// Redirigir / a la interfaz web
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // ========== ENDPOINTS DE LA API ==========
@@ -693,9 +694,16 @@ app.use('/api/*', (req, res) => {
     });
 });
 
-// Redirigir todas las demás rutas a la interfaz web
+// IMPORTANTE: Esta ruta debe estar AL FINAL para manejar todas las rutas no definidas
+// Redirigir todas las demás rutas a la interfaz web (para SPA)
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    // Si la ruta no empieza con /api, servir el index.html
+    if (!req.path.startsWith('/api')) {
+        res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    } else {
+        // Si empieza con /api pero no fue capturada antes, ya se manejó en app.use('/api/*')
+        res.status(404).json({ error: 'Ruta no encontrada' });
+    }
 });
 
 // Manejo de errores global
