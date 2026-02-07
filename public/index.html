@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servidor JSON - Railway</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-server"></i>
+                <h1>JSON Server API</h1>
+            </div>
+            <p class="subtitle">Servidor REST desplegado en Railway</p>
+        </header>
+
+        <main class="main-content">
+            <section class="info-section">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-info-circle"></i>
+                        <h2>Información del Servidor</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="status-indicator">
+                            <span class="status-dot active"></span>
+                            <span>Estado: <strong id="server-status">Verificando...</strong></span>
+                        </div>
+                        <div class="server-info">
+                            <p><i class="fas fa-clock"></i> Hora del servidor: <span id="server-time">--:--:--</span></p>
+                            <p><i class="fas fa-database"></i> Datos almacenados: <span id="data-count">0</span> registros</p>
+                            <p><i class="fas fa-globe"></i> Entorno: <span id="environment">--</span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="endpoints-section">
+                <h2><i class="fas fa-plug"></i> Endpoints Disponibles</h2>
+                
+                <div class="endpoints-grid">
+                    <!-- GET /api/datos -->
+                    <div class="endpoint-card">
+                        <div class="method get">GET</div>
+                        <h3>/api/datos</h3>
+                        <p>Obtener todos los datos almacenados</p>
+                        <button class="btn test-btn" onclick="testEndpoint('GET', '/api/datos')">
+                            <i class="fas fa-play"></i> Probar
+                        </button>
+                    </div>
+
+                    <!-- GET /api/datos/:id -->
+                    <div class="endpoint-card">
+                        <div class="method get">GET</div>
+                        <h3>/api/datos/:id</h3>
+                        <p>Obtener un dato específico por ID</p>
+                        <div class="input-group">
+                            <input type="number" id="data-id" placeholder="ID del dato" min="1">
+                            <button class="btn test-btn" onclick="testGetById()">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- POST /api/datos -->
+                    <div class="endpoint-card">
+                        <div class="method post">POST</div>
+                        <h3>/api/datos</h3>
+                        <p>Crear un nuevo registro</p>
+                        <button class="btn test-btn" onclick="showCreateForm()">
+                            <i class="fas fa-plus"></i> Crear Nuevo
+                        </button>
+                    </div>
+
+                    <!-- PUT /api/datos/:id -->
+                    <div class="endpoint-card">
+                        <div class="method put">PUT</div>
+                        <h3>/api/datos/:id</h3>
+                        <p>Actualizar un registro existente</p>
+                        <button class="btn test-btn" onclick="showUpdateForm()">
+                            <i class="fas fa-edit"></i> Actualizar
+                        </button>
+                    </div>
+
+                    <!-- DELETE /api/datos/:id -->
+                    <div class="endpoint-card">
+                        <div class="method delete">DELETE</div>
+                        <h3>/api/datos/:id</h3>
+                        <p>Eliminar un registro</p>
+                        <div class="input-group">
+                            <input type="number" id="delete-id" placeholder="ID a eliminar" min="1">
+                            <button class="btn delete-btn" onclick="deleteData()">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- GET /api/estado -->
+                    <div class="endpoint-card">
+                        <div class="method get">GET</div>
+                        <h3>/api/estado</h3>
+                        <p>Verificar estado del servidor</p>
+                        <button class="btn test-btn" onclick="testEndpoint('GET', '/api/estado')">
+                            <i class="fas fa-heartbeat"></i> Estado
+                        </button>
+                    </div>
+
+                    <!-- GET /api/saludo -->
+                    <div class="endpoint-card">
+                        <div class="method get">GET</div>
+                        <h3>/api/saludo</h3>
+                        <p>Saludo personalizado</p>
+                        <div class="input-group">
+                            <input type="text" id="nombre" placeholder="Tu nombre">
+                            <button class="btn test-btn" onclick="testSaludo()">
+                                <i class="fas fa-hand-wave"></i> Saludar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="response-section">
+                <h2><i class="fas fa-code"></i> Respuesta del Servidor</h2>
+                <div class="response-container">
+                    <div class="response-header">
+                        <span id="response-status">Esperando solicitud...</span>
+                        <button class="btn clear-btn" onclick="clearResponse()">
+                            <i class="fas fa-trash"></i> Limpiar
+                        </button>
+                    </div>
+                    <pre id="response-output">{"mensaje": "Haz clic en cualquier endpoint para probar la API"}</pre>
+                </div>
+            </section>
+
+            <!-- Modal para crear datos -->
+            <div id="create-modal" class="modal">
+                <div class="modal-content">
+                    <h3><i class="fas fa-plus-circle"></i> Crear Nuevo Dato</h3>
+                    <form id="create-form">
+                        <input type="text" id="create-nombre" placeholder="Nombre" required>
+                        <select id="create-activo" required>
+                            <option value="">Selecciona estado</option>
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
+                        </select>
+                        <textarea id="create-descripcion" placeholder="Descripción (opcional)" rows="3"></textarea>
+                        <div class="modal-buttons">
+                            <button type="submit" class="btn submit-btn">Crear</button>
+                            <button type="button" class="btn cancel-btn" onclick="closeModal()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal para actualizar datos -->
+            <div id="update-modal" class="modal">
+                <div class="modal-content">
+                    <h3><i class="fas fa-edit"></i> Actualizar Dato</h3>
+                    <form id="update-form">
+                        <input type="number" id="update-id" placeholder="ID del dato a actualizar" required min="1">
+                        <input type="text" id="update-nombre" placeholder="Nuevo nombre">
+                        <select id="update-activo">
+                            <option value="">Estado (opcional)</option>
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
+                        </select>
+                        <div class="modal-buttons">
+                            <button type="submit" class="btn submit-btn">Actualizar</button>
+                            <button type="button" class="btn cancel-btn" onclick="closeModal()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>🚂 Desplegado en <strong>Railway</strong> | Node.js JSON Server</p>
+            <p class="footer-links">
+                <a href="/api/docs" target="_blank"><i class="fas fa-book"></i> Documentación</a>
+                <a href="https://railway.app" target="_blank"><i class="fas fa-external-link-alt"></i> Railway</a>
+                <a href="https://github.com" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="base.js"></script>
+</body>
+</html>
