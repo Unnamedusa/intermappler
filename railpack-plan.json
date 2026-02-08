@@ -3,6 +3,7 @@
   "build": {
     "commands": {
       "setup": "apt-get update && apt-get install -y python3 python3-pip",
+      "prebuild": "mkdir -p /app/scripts && cp -r ./scripts/* /app/scripts/ 2>/dev/null || echo 'Scripts copiados'",
       "install": "npm ci --omit=dev",
       "build": "npm run build",
       "start": "npm start"
