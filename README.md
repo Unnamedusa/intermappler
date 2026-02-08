@@ -1,10 +1,32 @@
-# 🔐 INTERMAPPLER - realtime map system
+# 🗺️ InterMappler - Sistema de Mapeo Inteligente Global
 
-## description
-real time map for which can predict all of your dangers in your hand...
+## 🔐 **Sistema de Encriptación de 3 Capas**
 
-## EXTRA/LAW ISSUES (READ CAREFULLY)
+### **L1 - Quantum Fractal Encryption**
+- **Ubicación**: `base/incript/L1_quantum.js`
+- **Algoritmo**: Fractal-Quantum Chaotic Encryption
+- **Características**:
+  - Generación de semillas cuánticas
+  - Patrones fractales recursivos
+  - Cifrado basado en proporción áurea (Phi)
+  - Ruido cuántico aleatorio
 
-remember to do not share any private file from here, or law issues will be applied to you!!!
+### **L2 - Enigma Modern Encryption**
+- **Ubicación**: `base/incript/L2_enigma.js`
+- **Algoritmo**: Enigma Machine Modernized
+- **Características**:
+  - 5 rotores configurables
+  - Tablero de conexiones dinámico
+  - Reflector polimórfico
+  - Rotación no-lineal
 
+### **L3 - Sneaker Active Protection**
+- **Ubicación**: `base/incript/L3_sneaker.js`
+- **Algoritmo**: Active Defense System
+- **Características**:
+  - Detección de intrusiones en tiempo real
+  - Respuesta activa a ataques
+  - Generación de datos falsos (honeypot)
+  - Modo sigiloso activado
 
+## **📁 Estructura de Encriptación Actualizada**
