@@ -13,7 +13,7 @@
     "format": "prettier --write \"**/*.{js,json,md,css,html}\" --ignore-unknown || true",
     "format:check": "prettier --check \"**/*.{js,json,md,css,html}\" || true",
     
-    "setup": "node scripts/setup.js",
+    "setup": "node inscript/setup.js",
     "postinstall": "npm run setup",
     
     "clean": "rm -rf node_modules package-lock.json dist build public",
