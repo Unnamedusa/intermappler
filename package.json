@@ -13,29 +13,29 @@
     "format": "prettier --write \"**/*.{js,json,md,css,html}\" --ignore-unknown || true",
     "format:check": "prettier --check \"**/*.{js,json,md,css,html}\" || true",
     
-    "setup": "node inscript/setup.js",
+    "setup": "node scripts/setup.js",
     "postinstall": "npm run setup",
     
     "clean": "rm -rf node_modules package-lock.json dist build public",
     "clean:all": "rm -rf node_modules package-lock.json .env *.log coverage .next .nuxt .vuepress .svelte-kit",
     
-    "build": "echo '✅ Build: No se requieren acciones adicionales'",
-    "build:assets": "echo '✅ Assets: Usando estructura web/ directamente'",
-    "build:translations": "echo '✅ Traducciones: i18next configurado'",
+    "build": "echo 'Build completado (sin acciones adicionales)'",
+    "build:assets": "echo 'Assets listos (usando web/ directamente)'",
+    "build:translations": "echo 'Traducciones configuradas (usando i18next)'",
     
-    "translate:sync": "echo 'ℹ️  Traducciones: Sincronización automática con i18next'",
-    "translate:extract": "echo 'ℹ️  Traducciones: i18next maneja la extracción'",
+    "translate:sync": "echo 'Sincronización de traducciones no requerida'",
+    "translate:extract": "echo 'Extracción de traducciones no requerida'",
     
-    "health": "echo '✅ Salud: Sistema operativo'",
-    "backup": "echo 'ℹ️  Backup: Configurar según necesidad'",
-    "stats": "echo '📊 Estadísticas: Disponible en runtime'",
+    "health": "echo '✅ Sistema saludable'",
+    "backup": "echo '⚠️  Backup no configurado'",
+    "stats": "echo '📊 Estadísticas no disponibles'",
     
-    "docker:build": "echo '🐳 Docker: Usando Railway para despliegue'",
-    "docker:run": "echo '🐳 Docker: Usando Railway para ejecución'",
+    "docker:build": "echo '⚠️  Docker no configurado. Usando Railway'",
+    "docker:run": "echo '⚠️  Docker no configurado. Usando Railway'",
     
     "security:check": "npm audit --audit-level=moderate || true",
     "security:fix": "npm audit fix --force || true",
-    "update:deps": "npx npm-check-updates -u || echo 'ℹ️  Dependencias: Verificación completada'"
+    "update:deps": "npx npm-check-updates -u || echo 'Update check skipped'"
   },
   "keywords": [
     "intermappler",
