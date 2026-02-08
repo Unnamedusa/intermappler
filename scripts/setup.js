@@ -169,7 +169,7 @@ const translations = {
         "Acceso Seguro": "Accès Sécurisé",
         "Tipo de Usuario": "Type d'Utilisateur",
         "Especialización": "Spécialisation",
-        "Recordar esta sesión (30 min)": "Se souvenir de cette session (30 min)",
+        "Recordar esta sesión (30 min)": "Se souvenir de esta session (30 min)",
         "¿Problemas para acceder?": "Problèmes d'accès ?",
         "Iniciar Sesión Segura": "Connexion Sécurisée",
         "Acceder al Mapa Público": "Accéder à la Carte Publique"
@@ -777,60 +777,6 @@ pytest-cov==4.1.0`;
     console.log('✅ requirements.txt creado');
 }
 
-// Crear setup.py para instalación Python
-const setupPyPath = path.join(__dirname, '..', 'setup.py');
-if (!fs.existsSync(setupPyPath)) {
-    const setupPy = `#!/usr/bin/env python3
-"""
-Setup para componentes Python de InterMappler
-"""
-
-from setuptools import setup, find_packages
-import os
-
-# Leer requirements
-def read_requirements():
-    with open('requirements.txt', 'r') as f:
-        return [line.strip() for line in f if line.strip() and not line.startswith('#')]
-
-setup(
-    name="intermappler-py",
-    version="3.14.0",
-    description="Componentes Python para InterMappler - Sistema de Mapeo Inteligente",
-    long_description=open('README.md').read() if os.path.exists('README.md') else "",
-    author="InterMappler Team",
-    author_email="dev@intermappler.org",
-    url="https://intermappler.org",
-    packages=find_packages(include=['base', 'base.incript']),
-    install_requires=read_requirements(),
-    python_requires=">=3.8",
-    classifiers=[
-        "Development Status :: 4 - Beta",
-        "Intended Audience :: Developers",
-        "Topic :: Security",
-        "Topic :: Scientific/Engineering :: GIS",
-        "License :: Proprietary",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-    ],
-    entry_points={
-        "console_scripts": [
-            "intermappler-advisor=base.incript.advisor:main",
-        ],
-    },
-    include_package_data=True,
-    package_data={
-        "base.incript": ["*.py", "*.json"],
-    },
-)`;
-    
-    fs.writeFileSync(setupPyPath, setupPy);
-    console.log('✅ setup.py creado');
-}
-
 // ===== ARCHIVOS DE CONFIGURACIÓN =====
 
 // Crear .env con configuración completa
@@ -888,794 +834,20 @@ BACKUP_DIR=backups/
 LOG_DIR=logs/
 LOCALES_DIR=locales/
 
-# 🗄️ BASE DE DATOS (OPCIONAL)
-# DATABASE_URL=mongodb://localhost:27017/intermappler
-# REDIS_URL=redis://localhost:6379
-# MONGO_USER=admin
-# MONGO_PASS=secret
-
-# 📧 EMAIL (OPCIONAL)
-# SMTP_HOST=smtp.gmail.com
-# SMTP_PORT=587
-# SMTP_USER=your_email@gmail.com
-# SMTP_PASS=your_app_password
-# EMAIL_FROM=noreply@intermappler.org
-
-# 🌐 NETWORK
-CORS_ORIGIN=http://localhost:3000
-TRUST_PROXY=1
-COMPRESSION_ENABLED=true
-HELMET_ENABLED=true
-
-# 📊 MONITOREO Y LOGS
-METRICS_ENABLED=true
-LOGGING_ENABLED=true
-HEALTH_CHECK_INTERVAL=30000
-AUDIT_LOGGING=true
-PERFORMANCE_MONITORING=true
-
-# 🚀 OPTIMIZACIONES
-CACHE_ENABLED=true
-MINIFY_ASSETS=true
-BUNDLE_ANALYSIS=true
-LAZY_LOADING=true
-CODE_SPLITTING=true
-
-# 🔧 DESARROLLO
+# 🚀 DESARROLLO
 WATCH_MODE=true
 LIVE_RELOAD=true
 SOURCE_MAPS=true
 ESLINT_ENABLED=true
-PRETTIER_ENABLED=true
-
-# 🧪 TESTING
-TEST_ENVIRONMENT=false
-COVERAGE_ENABLED=false
-E2E_TESTING=false
-UNIT_TESTING=false
-
-# 🐳 DOCKER (OPCIONAL)
-# DOCKER_ENABLED=false
-# DOCKER_COMPOSE=false
-# CONTAINER_NAME=intermappler
-
-# 🔐 ADVANCED SECURITY
-ENABLE_2FA=false
-IP_WHITELISTING=false
-GEO_BLOCKING=false
-DDOS_PROTECTION=true
-SQL_INJECTION_PROTECTION=true
-XSS_PROTECTION=true`;
+PRETTIER_ENABLED=true`;
     
     fs.writeFileSync(envPath, envContent);
     console.log('✅ .env creado (configuración completa)');
 }
 
-// ===== SERVER.JS ACTUALIZADO =====
+// ===== CREAR ARCHIVOS EN SCRIPTS/ =====
 
-// Crear server.js con soporte completo
-const serverPath = path.join(__dirname, '..', 'server.js');
-if (!fs.existsSync(serverPath)) {
-    const serverCode = `// server.js - Servidor principal de InterMappler v3.14.0
-// Con soporte completo para Python, traducciones y seguridad
-
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const compression = require('compression');
-const path = require('path');
-const fs = require('fs').promises;
-require('dotenv').config();
-
-console.log('🚀 Iniciando InterMappler v3.14.0...');
-console.log('📁 Directorio:', __dirname);
-console.log('🌍 Entorno:', process.env.NODE_ENV);
-
-// Verificar Python
-const { exec } = require('child_process');
-const util = require('util');
-const execPromise = util.promisify(exec);
-
-async function checkPython() {
-    try {
-        const { stdout } = await execPromise('python3 --version');
-        console.log(\`✅ Python disponible: \${stdout.trim()}\`);
-        return true;
-    } catch (error) {
-        console.warn('⚠️  Python no disponible. Algunas funciones estarán limitadas.');
-        return false;
-    }
-}
-
-// Importar módulos propios (con manejo de errores)
-let orchestrator, loginSystem, sessionManager, translator;
-
-try {
-    orchestrator = require('./base/incript/orchestrator');
-    console.log('🎭 Orchestrator cargado');
-} catch (error) {
-    console.error('❌ Error cargando orchestrator:', error.message);
-    orchestrator = { encryptData: () => ({ encrypted: 'error' }), decryptData: () => null };
-}
-
-try {
-    loginSystem = require('./base/auth/login-system');
-    console.log('🔐 Sistema de login cargado');
-} catch (error) {
-    console.error('❌ Error cargando login-system:', error.message);
-    loginSystem = { authenticate: () => ({ success: false, error: 'System error' }) };
-}
-
-try {
-    sessionManager = require('./base/auth/session-manager');
-    console.log('👥 Gestor de sesiones cargado');
-} catch (error) {
-    console.error('❌ Error cargando session-manager:', error.message);
-    sessionManager = { createSession: () => ({ id: 'demo' }) };
-}
-
-try {
-    translator = require('./base/utils/translator');
-    console.log('🌍 Sistema de traducción cargado');
-} catch (error) {
-    console.error('❌ Error cargando translator:', error.message);
-    translator = { translate: (text) => text, getSupportedLanguages: () => [] };
-}
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// ===== MIDDLEWARE CONFIGURABLE =====
-app.use(helmet({
-    contentSecurityPolicy: process.env.NODE_ENV === 'production' ? {
-        directives: {
-            defaultSrc: ["'self'"],
-            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-            fontSrc: ["'self'", "https://fonts.gstatic.com"],
-            scriptSrc: ["'self'", "https://cdnjs.cloudflare.com"],
-            imgSrc: ["'self'", "data:", "https:"],
-            connectSrc: ["'self'"],
-            frameSrc: ["'none'"],
-            objectSrc: ["'none'"],
-            mediaSrc: ["'self'"],
-            manifestSrc: ["'self'"]
-        }
-    } : false
-}));
-
-app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Language', 'X-Translate']
-}));
-
-if (process.env.COMPRESSION_ENABLED === 'true') {
-    app.use(compression());
-}
-
-app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'));
-app.use(express.json({ limit: process.env.MAX_FILE_SIZE || '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: process.env.MAX_FILE_SIZE || '50mb' }));
-
-// Servir archivos estáticos con caché configurable
-const staticOptions = {
-    maxAge: process.env.NODE_ENV === 'production' ? '1d' : '0',
-    setHeaders: (res, path) => {
-        if (path.endsWith('.html')) {
-            res.set('Cache-Control', 'no-cache');
-        }
-    }
-};
-
-app.use(express.static(path.join(__dirname, 'public'), staticOptions));
-app.use('/locales', express.static(path.join(__dirname, 'locales'), staticOptions));
-
-// ===== MIDDLEWARE PERSONALIZADO =====
-
-// Detector de idioma
-app.use((req, res, next) => {
-    const acceptLanguage = req.headers['accept-language'];
-    const xLanguage = req.headers['x-language'];
-    
-    req.language = xLanguage || (acceptLanguage ? acceptLanguage.split(',')[0].split('-')[0] : 'es');
-    req.language = req.language.toLowerCase();
-    
-    // Validar idioma
-    const supportedLangs = (process.env.SUPPORTED_LANGUAGES || 'es,en').split(',');
-    if (!supportedLangs.includes(req.language)) {
-        req.language = process.env.DEFAULT_LANGUAGE || 'es';
-    }
-    
-    next();
-});
-
-// Logger de auditoría
-if (process.env.AUDIT_LOGGING === 'true') {
-    app.use((req, res, next) => {
-        const start = Date.now();
-        const originalSend = res.send;
-        
-        res.send = function(body) {
-            const duration = Date.now() - start;
-            
-            // Log de auditoría
-            const auditLog = {
-                timestamp: new Date().toISOString(),
-                method: req.method,
-                url: req.url,
-                ip: req.ip,
-                userAgent: req.get('User-Agent'),
-                language: req.language,
-                statusCode: res.statusCode,
-                duration: duration + 'ms',
-                userId: req.user ? req.user.id : 'anonymous'
-            };
-            
-            // Guardar en archivo (simplificado)
-            const logDir = path.join(__dirname, 'logs');
-            if (!fs.existsSync(logDir)) {
-                fs.mkdirSync(logDir, { recursive: true });
-            }
-            
-            const logFile = path.join(logDir, \`audit-\${new Date().toISOString().split('T')[0]}.log\`);
-            fs.appendFileSync(logFile, JSON.stringify(auditLog) + '\\n');
-            
-            return originalSend.call(this, body);
-        };
-        
-        next();
-    });
-}
-
-// ===== RUTAS DE API =====
-
-// Health check completo
-app.get('/api/health', async (req, res) => {
-    try {
-        const pythonAvailable = await checkPython();
-        
-        const healthData = {
-            status: 'healthy',
-            version: '3.14.0',
-            timestamp: new Date().toISOString(),
-            uptime: process.uptime(),
-            environment: process.env.NODE_ENV,
-            services: {
-                orchestrator: orchestrator ? 'active' : 'error',
-                auth: loginSystem ? 'active' : 'error',
-                session: sessionManager ? 'active' : 'error',
-                translation: translator ? 'active' : 'error',
-                python: pythonAvailable ? 'available' : 'unavailable'
-            },
-            system: {
-                node_version: process.version,
-                platform: process.platform,
-                architecture: process.arch,
-                memory: process.memoryUsage(),
-                cpu: process.cpuUsage()
-            },
-            config: {
-                supported_languages: (process.env.SUPPORTED_LANGUAGES || 'es,en').split(','),
-                default_language: process.env.DEFAULT_LANGUAGE || 'es',
-                translation_enabled: process.env.TRANSLATION_ENABLED === 'true',
-                python_enabled: process.env.PYTHON_ENABLED === 'true'
-            }
-        };
-        
-        res.json(healthData);
-    } catch (error) {
-        res.status(500).json({
-            status: 'degraded',
-            error: error.message,
-            timestamp: new Date().toISOString()
-        });
-    }
-});
-
-// Sistema de autenticación mejorado
-app.post('/api/auth/login', async (req, res) => {
-    try {
-        const { username, password, userType, subrole } = req.body;
-        const clientLanguage = req.language;
-        
-        console.log(\`🔐 Intento de login: \${username} (\${userType}) [\${clientLanguage}]\`);
-        
-        // Validación básica
-        if (!username || !password) {
-            return res.status(400).json({
-                success: false,
-                error: translator.translate('Usuario y contraseña requeridos', clientLanguage),
-                code: 'MISSING_CREDENTIALS'
-            });
-        }
-        
-        const result = await loginSystem.authenticate(username, password, userType, subrole);
-        
-        if (result.success) {
-            // Crear sesión
-            const session = sessionManager.createSession(result.user, {
-                ip: req.ip,
-                userAgent: req.get('User-Agent'),
-                language: clientLanguage,
-                headers: req.headers
-            });
-            
-            // Encriptar datos sensibles
-            let encryptedData;
-            try {
-                encryptedData = await orchestrator.encryptData({
-                    session: session,
-                    user: result.user,
-                    timestamp: new Date().toISOString()
-                }, 3);
-            } catch (encryptError) {
-                console.warn('⚠️  Encriptación falló, usando datos sin encriptar:', encryptError.message);
-                encryptedData = { encrypted: 'ENCRYPTION_FAILED', metadata: { error: encryptError.message } };
-            }
-            
-            // Log de login exitoso
-            const loginLog = {
-                timestamp: new Date().toISOString(),
-                event: 'LOGIN_SUCCESS',
-                username: username,
-                userType: userType,
-                ip: req.ip,
-                sessionId: session.id,
-                language: clientLanguage
-            };
-            
-            const logDir = path.join(__dirname, 'logs');
-            if (!fs.existsSync(logDir)) {
-                fs.mkdirSync(logDir, { recursive: true });
-            }
-            
-            const logFile = path.join(logDir, \`security-\${new Date().toISOString().split('T')[0]}.log\`);
-            fs.appendFileSync(logFile, JSON.stringify(loginLog) + '\\n');
-            
-            res.json({
-                success: true,
-                message: translator.translate('Autenticación exitosa', clientLanguage),
-                sessionId: session.id,
-                authToken: result.token,
-                user: {
-                    ...result.user,
-                    language: clientLanguage
-                },
-                permissions: result.user.permissions,
-                expiresIn: result.expiresIn,
-                encrypted: encryptedData,
-                language: clientLanguage,
-                timestamp: new Date().toISOString()
-            });
-        } else {
-            // Log de intento fallido
-            const failedLog = {
-                timestamp: new Date().toISOString(),
-                event: 'LOGIN_FAILED',
-                username: username,
-                ip: req.ip,
-                reason: result.error,
-                attempts: result.attempts,
-                locked: result.locked
-            };
-            
-            const logDir = path.join(__dirname, 'logs');
-            if (!fs.existsSync(logDir)) {
-                fs.mkdirSync(logDir, { recursive: true });
-            }
-            
-            const logFile = path.join(logDir, \`security-\${new Date().toISOString().split('T')[0]}.log\`);
-            fs.appendFileSync(logFile, JSON.stringify(failedLog) + '\\n');
-            
-            res.status(401).json({
-                success: false,
-                error: translator.translate(result.error, clientLanguage),
-                attempts: result.attempts,
-                locked: result.locked,
-                code: result.locked ? 'ACCOUNT_LOCKED' : 'INVALID_CREDENTIALS'
-            });
-        }
-    } catch (error) {
-        console.error('❌ Error en login:', error);
-        
-        res.status(500).json({
-            success: false,
-            error: translator.translate('Error interno del sistema', req.language),
-            code: 'INTERNAL_ERROR',
-            timestamp: new Date().toISOString()
-        });
-    }
-});
-
-// Sistema de traducción mejorado
-app.get('/api/translate/languages', (req, res) => {
-    try {
-        const languages = translator.getSupportedLanguages ? translator.getSupportedLanguages() : [];
-        
-        res.json({
-            success: true,
-            languages: languages,
-            default_language: process.env.DEFAULT_LANGUAGE || 'es',
-            auto_detect: process.env.TRANSLATION_ENABLED === 'true',
-            timestamp: new Date().toISOString()
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: 'Error cargando idiomas',
-            timestamp: new Date().toISOString()
-        });
-    }
-});
-
-app.post('/api/translate/text', (req, res) => {
-    try {
-        const { text, target_language = 'es', source_language = 'auto' } = req.body;
-        
-        if (!text) {
-            return res.status(400).json({
-                success: false,
-                error: 'Texto requerido',
-                code: 'MISSING_TEXT'
-            });
-        }
-        
-        const translated = translator.translate(text, target_language, source_language);
-        
-        res.json({
-            success: true,
-            original: text,
-            translated_text: translated,
-            target_language: target_language,
-            source_language: source_language,
-            auto_translated: translated !== text,
-            timestamp: new Date().toISOString()
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: 'Error en traducción',
-            timestamp: new Date().toISOString()
-        });
-    }
-});
-
-// Sistema de Python/Advisor
-app.get('/api/system/advisor', async (req, res) => {
-    try {
-        if (process.env.PYTHON_ENABLED !== 'true') {
-            return res.json({
-                success: false,
-                error: 'Python advisor deshabilitado',
-                python_enabled: false
-            });
-        }
-        
-        const advisorPath = path.join(__dirname, 'base', 'incript', 'advisor.py');
-        
-        if (!fs.existsSync(advisorPath)) {
-            return res.json({
-                success: false,
-                error: 'Advisor Python no encontrado',
-                advisor_path: advisorPath
-            });
-        }
-        
-        const { stdout } = await execPromise(\`python3 \${advisorPath} --action=analyze\`);
-        const analysis = JSON.parse(stdout);
-        
-        res.json({
-            success: true,
-            python_enabled: true,
-            advisor_version: analysis.version,
-            analysis: analysis,
-            timestamp: new Date().toISOString()
-        });
-    } catch (error) {
-        console.error('❌ Error ejecutando advisor Python:', error);
-        
-        res.json({
-            success: false,
-            error: error.message,
-            python_enabled: false,
-            fallback_analysis: {
-                security_level: 'high',
-                encryption_layers: 3,
-                status: 'operational',
-                timestamp: new Date().toISOString()
-            }
-        });
-    }
-});
-
-// Sistema de información
-app.get('/api/system/info', (req, res) => {
-    const info = {
-        name: 'InterMappler',
-        version: '3.14.0',
-        description: 'Sistema de Mapeo Inteligente Global con Encriptación de 3 Capas',
-        features: [
-            '🎭 Encriptación de 3 capas',
-            '🌍 Sistema multilingüe (14 idiomas)',
-            '🔐 Autenticación avanzada',
-            '👥 Gestión de roles jerárquica',
-            '🐍 Integración Python',
-            '🎨 Interfaz moderna y responsiva',
-            '📊 Monitoreo en tiempo real',
-            '🛡️ Sistema de seguridad Sneaker'
-        ],
-        technologies: {
-            backend: 'Node.js + Express',
-            frontend: 'HTML5 + CSS3 + JavaScript',
-            encryption: 'AES-256 + Base64 + XOR + Custom',
-            translation: 'Sistema propio + i18n',
-            security: 'JWT + bcrypt + helmet + rate limiting',
-            python: 'Análisis de seguridad y fractales'
-        },
-        roles: sessionManager.getRoleHierarchy ? sessionManager.getRoleHierarchy() : [],
-        languages: (process.env.SUPPORTED_LANGUAGES || 'es,en').split(','),
-        active_sessions: sessionManager.getActiveSessions ? sessionManager.getActiveSessions().length : 0,
-        status: 'operational',
-        timestamp: new Date().toISOString(),
-        uptime: process.uptime()
-    };
-    
-    res.json(info);
-});
-
-// Servir archivos de traducción
-app.get('/api/translate/file/:lang', async (req, res) => {
-    try {
-        const lang = req.params.lang;
-        const filePath = path.join(__dirname, 'locales', lang, 'translation.json');
-        
-        if (fs.existsSync(filePath)) {
-            const data = await fs.readFile(filePath, 'utf8');
-            res.json(JSON.parse(data));
-        } else {
-            res.status(404).json({
-                success: false,
-                error: \`Archivo de traducción para \${lang} no encontrado\`
-            });
-        }
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: error.message
-        });
-    }
-});
-
-// ===== RUTAS DE FRONTEND =====
-
-// Landing page
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'web', 'index.html'));
-});
-
-// Login page
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'web', 'login', 'index.html'));
-});
-
-// Redireccionar login.html a la ruta correcta
-app.get('/login.html', (req, res) => {
-    res.redirect('/login');
-});
-
-// Dashboard placeholder
-app.get('/dashboard/:role', (req, res) => {
-    const { role } = req.params;
-    const lang = req.language;
-    
-    const dashboardHtml = \`
-    <!DOCTYPE html>
-    <html lang="\${lang}">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dashboard \${role} - InterMappler</title>
-        <style>
-            body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #0f172a; color: white; }
-            .container { max-width: 1200px; margin: 0 auto; }
-            h1 { color: #3b82f6; }
-            .card { background: #1e293b; padding: 20px; border-radius: 10px; margin: 20px 0; }
-            .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>🚀 Dashboard de \${role}</h1>
-            <div class="card">
-                <h2>Vista preliminar</h2>
-                <p>El dashboard completo para \${role} estará disponible en la próxima actualización.</p>
-                <p>Características incluidas:</p>
-                <div class="features">
-                    <div class="card">
-                        <h3>📊 Mapa en tiempo real</h3>
-                        <p>Visualización geoespacial con múltiples capas</p>
-                    </div>
-                    <div class="card">
-                        <h3>📈 Análisis de datos</h3>
-                        <p>Herramientas de análisis según tu rol</p>
-                    </div>
-                    <div class="card">
-                        <h3>🔐 Panel de seguridad</h3>
-                        <p>Gestión de permisos y auditoría</p>
-                    </div>
-                </div>
-            </div>
-            <a href="/" style="color: #60a5fa;">← Volver al inicio</a>
-        </div>
-    </body>
-    </html>
-    \`;
-    
-    res.send(dashboardHtml);
-});
-
-// Mapa público
-app.get('/map/public', (req, res) => {
-    const lang = req.language;
-    
-    const publicMapHtml = \`
-    <!DOCTYPE html>
-    <html lang="\${lang}">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Mapa Público - InterMappler</title>
-        <style>
-            body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #0f172a; color: white; }
-            .container { max-width: 1200px; margin: 0 auto; }
-            h1 { color: #10b981; }
-            .map-container { background: #1e293b; padding: 20px; border-radius: 10px; margin: 20px 0; height: 500px; display: flex; align-items: center; justify-content: center; }
-            .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0; }
-            .info-card { background: #334155; padding: 15px; border-radius: 8px; }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>🌍 Mapa Público de InterMappler</h1>
-            <p>Información de emergencia disponible para todos. Datos limitados por seguridad.</p>
-            
-            <div class="map-container">
-                <div style="text-align: center;">
-                    <div style="font-size: 4rem; margin-bottom: 20px;">🗺️</div>
-                    <h2>Mapa en tiempo real</h2>
-                    <p>Visualización pública de datos geoespaciales</p>
-                    <p><em>El mapa completo requiere autenticación</em></p>
-                </div>
-            </div>
-            
-            <div class="info-grid">
-                <div class="info-card">
-                    <h3>🚨 Alertas de Emergencia</h3>
-                    <p>Información sobre desastres naturales y situaciones críticas</p>
-                </div>
-                <div class="info-card">
-                    <h3>⛈️ Pronóstico Meteorológico</h3>
-                    <p>Datos climáticos actualizados cada 15 minutos</p>
-                </div>
-                <div class="info-card">
-                    <h3>🏥 Servicios de Emergencia</h3>
-                    <p>Localización de hospitales y centros de ayuda</p>
-                </div>
-                <div class="info-card">
-                    <h3>📡 Información Pública</h3>
-                    <p>Datos accesibles sin necesidad de registro</p>
-                </div>
-            </div>
-            
-            <a href="/" style="color: #60a5fa;">← Volver al inicio</a> | 
-            <a href="/login" style="color: #60a5fa;">🔐 Acceso seguro para más funciones</a>
-        </div>
-    </body>
-    </html>
-    \`;
-    
-    res.send(publicMapHtml);
-});
-
-// ===== MANEJO DE ERRORES =====
-
-// 404 - Ruta no encontrada
-app.use((req, res) => {
-    res.status(404).json({
-        error: translator.translate('Ruta no encontrada', req.language),
-        path: req.path,
-        method: req.method,
-        timestamp: new Date().toISOString(),
-        language: req.language,
-        suggestion: 'Verifique la URL o consulte la documentación en /api/health'
-    });
-});
-
-// Error handler global
-app.use((err, req, res, next) => {
-    console.error('🔥 Error global:', err);
-    
-    const errorResponse = {
-        error: process.env.NODE_ENV === 'development' ? err.message : translator.translate('Error interno del servidor', req.language),
-        code: err.code || 'INTERNAL_ERROR',
-        timestamp: new Date().toISOString(),
-        language: req.language,
-        requestId: req.id || Math.random().toString(36).substr(2, 9)
-    };
-    
-    if (process.env.NODE_ENV === 'development') {
-        errorResponse.stack = err.stack;
-        errorResponse.details = {
-            method: req.method,
-            url: req.url,
-            headers: req.headers,
-            body: req.body
-        };
-    }
-    
-    res.status(err.status || 500).json(errorResponse);
-});
-
-// ===== INICIAR SERVIDOR =====
-
-async function startServer() {
-    try {
-        // Verificar Python al iniciar
-        const pythonAvailable = await checkPython();
-        
-        app.listen(PORT, () => {
-            console.log(\`\\n==========================================\`);
-            console.log(\`✅ InterMappler v3.14.0 ejecutándose\`);
-            console.log(\`🌐 URL: http://localhost:\${PORT}\`);
-            console.log(\`📁 Entorno: \${process.env.NODE_ENV}\`);
-            console.log(\`🐍 Python: \${pythonAvailable ? '✅ Disponible' : '⚠️  No disponible'}\`);
-            console.log(\`🌍 Idiomas: \${(process.env.SUPPORTED_LANGUAGES || 'es,en').split(',').length} soportados\`);
-            console.log(\`🔐 Sesiones activas: \${sessionManager.getActiveSessions ? sessionManager.getActiveSessions().length : 0}\`);
-            console.log(\`🎭 Encriptación: 3 capas activas\`);
-            console.log(\`📊 Logs: \${path.join(__dirname, 'logs')}\`);
-            console.log(\`==========================================\\n\`);
-            console.log(\`🚀 Sistema listo. Presiona Ctrl+C para detener.\\n\`);
-            
-            // Mensaje de bienvenida
-            console.log(\`🔐 Credenciales demo:\`);
-            console.log(\`   👤 Usuario: admin_nova\`);
-            console.log(\`   🔑 Contraseña: admin123\`);
-            console.log(\`   👑 Rol: Administrador\\n\`);
-            
-            console.log(\`🎨 La interfaz minimalista está disponible en:\`);
-            console.log(\`   • Landing page: http://localhost:\${PORT}\`);
-            console.log(\`   • Login: http://localhost:\${PORT}/login\\n\`);
-        });
-    } catch (error) {
-        console.error('❌ Error al iniciar el servidor:', error);
-        process.exit(1);
-    }
-}
-
-// Manejar cierre elegante
-process.on('SIGINT', () => {
-    console.log('\\n🔻 Recibido SIGINT. Cerrando servidor...');
-    process.exit(0);
-});
-
-process.on('SIGTERM', () => {
-    console.log('\\n🔻 Recibido SIGTERM. Cerrando servidor...');
-    process.exit(0);
-});
-
-// Iniciar servidor
-startServer();
-
-module.exports = app;`;
-    
-    fs.writeFileSync(serverPath, serverCode);
-    console.log('✅ server.js creado (servidor completo con Python)');
-}
-
-// Crear scripts adicionales
-console.log('\n📦 Creando scripts adicionales...');
+console.log('\n📦 Creando scripts adicionales en scripts/...');
 
 // Crear script de verificación de Python
 const pythonCheckPath = path.join(__dirname, '..', 'scripts', 'check-python.js');
@@ -1744,7 +916,7 @@ async function checkPythonEnvironment() {
 checkPythonEnvironment();`;
     
     fs.writeFileSync(pythonCheckPath, pythonCheck);
-    console.log('✅ check-python.js creado');
+    console.log('✅ check-python.js creado en scripts/');
     
     // Hacer ejecutable
     fs.chmodSync(pythonCheckPath, '755');
@@ -1809,10 +981,384 @@ if (require.main === module) {
 module.exports = { installPythonDependencies };`;
     
     fs.writeFileSync(installPythonPath, installPython);
-    console.log('✅ install-python-deps.js creado');
+    console.log('✅ install-python-deps.js creado en scripts/');
     
     // Hacer ejecutable
     fs.chmodSync(installPythonPath, '755');
+}
+
+// Crear script de salud básico
+const healthCheckPath = path.join(__dirname, '..', 'scripts', 'health-check.js');
+if (!fs.existsSync(healthCheckPath)) {
+    const healthCheck = `#!/usr/bin/env node
+// Script de verificación de salud del sistema
+
+console.log('🏥 Verificando salud del sistema...\\n');
+
+// Verificar directorios esenciales
+const fs = require('fs');
+const path = require('path');
+
+const essentialDirs = [
+    'base/incript',
+    'base/auth',
+    'base/utils',
+    'web',
+    'web/login',
+    'web/assets',
+    'scripts',
+    'public',
+    'locales',
+    'logs'
+];
+
+let allDirsExist = true;
+for (const dir of essentialDirs) {
+    const dirPath = path.join(__dirname, '..', dir);
+    if (fs.existsSync(dirPath)) {
+        console.log(\`✅ \${dir}\`);
+    } else {
+        console.log(\`❌ \${dir} - NO EXISTE\`);
+        allDirsExist = false;
+    }
+}
+
+// Verificar archivos esenciales
+const essentialFiles = [
+    'base/incript/orchestrator.js',
+    'base/incript/advisor.py',
+    'base/utils/translator.js',
+    'server.js',
+    'package.json',
+    '.env'
+];
+
+console.log('\\n📄 Verificando archivos...');
+let allFilesExist = true;
+for (const file of essentialFiles) {
+    const filePath = path.join(__dirname, '..', file);
+    if (fs.existsSync(filePath)) {
+        console.log(\`✅ \${file}\`);
+    } else {
+        console.log(\`❌ \${file} - NO EXISTE\`);
+        allFilesExist = false;
+    }
+}
+
+// Verificar dependencias Node
+console.log('\\n📦 Verificando dependencias Node...');
+try {
+    const packageJson = require(path.join(__dirname, '..', 'package.json'));
+    console.log(\`✅ package.json: v\${packageJson.version}\`);
+    console.log(\`📊 Dependencias: \${Object.keys(packageJson.dependencies || {}).length}\`);
+    console.log(\`🧪 Dev Dependencies: \${Object.keys(packageJson.devDependencies || {}).length}\`);
+} catch (error) {
+    console.log(\`❌ Error leyendo package.json: \${error.message}\`);
+}
+
+// Resumen
+console.log('\\n📊 RESUMEN DE SALUD:');
+console.log(\`   Directorios esenciales: \${allDirsExist ? '✅' : '❌'}\`);
+console.log(\`   Archivos esenciales: \${allFilesExist ? '✅' : '❌'}\`);
+
+if (allDirsExist && allFilesExist) {
+    console.log('\\n🎉 ¡Sistema saludable!');
+    console.log('🚀 Ejecuta: npm start');
+    process.exit(0);
+} else {
+    console.log('\\n⚠️  ¡Sistema con problemas!');
+    console.log('🔧 Ejecuta: npm run setup para reparar');
+    process.exit(1);
+}`;
+    
+    fs.writeFileSync(healthCheckPath, healthCheck);
+    console.log('✅ health-check.js creado en scripts/');
+    
+    // Hacer ejecutable
+    fs.chmodSync(healthCheckPath, '755');
+}
+
+// Crear script de backup básico
+const backupPath = path.join(__dirname, '..', 'scripts', 'backup.js');
+if (!fs.existsSync(backupPath)) {
+    const backup = `#!/usr/bin/env node
+// Script básico de backup
+
+const fs = require('fs');
+const path = require('path');
+const { exec } = require('child_process');
+const util = require('util');
+const execPromise = util.promisify(exec);
+
+async function createBackup() {
+    console.log('💾 Creando backup del sistema...\\n');
+    
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const backupDir = path.join(__dirname, '..', 'backups', \`backup-\${timestamp}\`);
+    
+    // Crear directorio de backup
+    if (!fs.existsSync(backupDir)) {
+        fs.mkdirSync(backupDir, { recursive: true });
+    }
+    
+    console.log(\`📁 Directorio de backup: \${backupDir}\`);
+    
+    // Archivos y directorios a respaldar
+    const itemsToBackup = [
+        'base/',
+        'web/',
+        'scripts/',
+        'locales/',
+        'server.js',
+        'package.json',
+        'package-lock.json',
+        '.env',
+        'requirements.txt'
+    ];
+    
+    let backedUpCount = 0;
+    let errorCount = 0;
+    
+    for (const item of itemsToBackup) {
+        const sourcePath = path.join(__dirname, '..', item);
+        const destPath = path.join(backupDir, item);
+        
+        if (fs.existsSync(sourcePath)) {
+            try {
+                // Crear directorio padre si no existe
+                const destDir = path.dirname(destPath);
+                if (!fs.existsSync(destDir)) {
+                    fs.mkdirSync(destDir, { recursive: true });
+                }
+                
+                // Copiar archivo/directorio
+                if (fs.statSync(sourcePath).isDirectory()) {
+                    // Copiar directorio
+                    await execPromise(\`cp -r "\${sourcePath}" "\${destDir}"\`);
+                } else {
+                    // Copiar archivo
+                    fs.copyFileSync(sourcePath, destPath);
+                }
+                
+                console.log(\`✅ \${item}\`);
+                backedUpCount++;
+            } catch (error) {
+                console.log(\`❌ \${item}: \${error.message}\`);
+                errorCount++;
+            }
+        } else {
+            console.log(\`⚠️  \${item}: No existe\`);
+        }
+    }
+    
+    // Crear archivo de metadatos
+    const metadata = {
+        timestamp: new Date().toISOString(),
+        version: '3.14.0',
+        system: 'InterMappler',
+        backed_up_items: backedUpCount,
+        errors: errorCount,
+        items: itemsToBackup
+    };
+    
+    const metadataPath = path.join(backupDir, 'backup-metadata.json');
+    fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2));
+    
+    console.log(\`\\n📊 Resumen del backup:\`);
+    console.log(\`   ✅ Respaldados: \${backedUpCount} items\`);
+    console.log(\`   ❌ Errores: \${errorCount}\`);
+    console.log(\`   💾 Metadatos: \${metadataPath}\`);
+    
+    if (errorCount === 0) {
+        console.log('\\n🎉 ¡Backup completado exitosamente!');
+        process.exit(0);
+    } else {
+        console.log('\\n⚠️  Backup completado con errores');
+        process.exit(1);
+    }
+}
+
+// Ejecutar backup
+createBackup().catch(error => {
+    console.error('❌ Error fatal en backup:', error);
+    process.exit(1);
+});`;
+    
+    fs.writeFileSync(backupPath, backup);
+    console.log('✅ backup.js creado en scripts/');
+    
+    // Hacer ejecutable
+    fs.chmodSync(backupPath, '755');
+}
+
+// Crear script de estadísticas
+const statsPath = path.join(__dirname, '..', 'scripts', 'stats.js');
+if (!fs.existsSync(statsPath)) {
+    const stats = `#!/usr/bin/env node
+// Script de estadísticas del sistema
+
+const fs = require('fs');
+const path = require('path');
+
+console.log('📊 Estadísticas del sistema InterMappler\\n');
+
+// Contar archivos por tipo
+function countFiles(dir, extensions) {
+    let count = 0;
+    
+    if (!fs.existsSync(dir)) {
+        return 0;
+    }
+    
+    const items = fs.readdirSync(dir);
+    
+    for (const item of items) {
+        const itemPath = path.join(dir, item);
+        const stat = fs.statSync(itemPath);
+        
+        if (stat.isDirectory()) {
+            count += countFiles(itemPath, extensions);
+        } else if (stat.isFile()) {
+            const ext = path.extname(item).toLowerCase();
+            if (extensions.includes(ext)) {
+                count++;
+            }
+        }
+    }
+    
+    return count;
+}
+
+// Calcular tamaño de directorio
+function getDirectorySize(dir) {
+    let size = 0;
+    
+    if (!fs.existsSync(dir)) {
+        return 0;
+    }
+    
+    const items = fs.readdirSync(dir);
+    
+    for (const item of items) {
+        const itemPath = path.join(dir, item);
+        const stat = fs.statSync(itemPath);
+        
+        if (stat.isDirectory()) {
+            size += getDirectorySize(itemPath);
+        } else {
+            size += stat.size;
+        }
+    }
+    
+    return size;
+}
+
+function formatBytes(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+try {
+    // Estadísticas generales
+    const rootDir = path.join(__dirname, '..');
+    
+    console.log('📁 ESTRUCTURA DE DIRECTORIOS:');
+    
+    const directories = [
+        { name: 'Base (backend)', path: 'base/' },
+        { name: 'Web (frontend)', path: 'web/' },
+        { name: 'Scripts', path: 'scripts/' },
+        { name: 'Public', path: 'public/' },
+        { name: 'Locales', path: 'locales/' },
+        { name: 'Logs', path: 'logs/' },
+        { name: 'Config', path: 'config/' },
+        { name: 'Uploads', path: 'uploads/' },
+        { name: 'Temp', path: 'temp/' },
+        { name: 'Backups', path: 'backups/' }
+    ];
+    
+    for (const dir of directories) {
+        const dirPath = path.join(rootDir, dir.path);
+        if (fs.existsSync(dirPath)) {
+            const size = getDirectorySize(dirPath);
+            const jsFiles = countFiles(dirPath, ['.js']);
+            const pyFiles = countFiles(dirPath, ['.py']);
+            const jsonFiles = countFiles(dirPath, ['.json']);
+            const htmlFiles = countFiles(dirPath, ['.html', '.htm']);
+            const cssFiles = countFiles(dirPath, ['.css']);
+            
+            console.log(\`\\n  📂 \${dir.name} (\${dir.path}):\`);
+            console.log(\`     Tamaño: \${formatBytes(size)}\`);
+            console.log(\`     Archivos JS: \${jsFiles}\`);
+            console.log(\`     Archivos Python: \${pyFiles}\`);
+            console.log(\`     Archivos JSON: \${jsonFiles}\`);
+            console.log(\`     Archivos HTML: \${htmlFiles}\`);
+            console.log(\`     Archivos CSS: \${cssFiles}\`);
+        } else {
+            console.log(\`\\n  📂 \${dir.name}: NO EXISTE\`);
+        }
+    }
+    
+    // Estadísticas de archivos por tipo
+    console.log('\\n📄 ESTADÍSTICAS POR TIPO DE ARCHIVO:');
+    
+    const fileTypes = [
+        { ext: '.js', name: 'JavaScript' },
+        { ext: '.py', name: 'Python' },
+        { ext: '.json', name: 'JSON' },
+        { ext: ['.html', '.htm'], name: 'HTML' },
+        { ext: '.css', name: 'CSS' },
+        { ext: '.md', name: 'Markdown' },
+        { ext: '.txt', name: 'Texto' }
+    ];
+    
+    for (const fileType of fileTypes) {
+        const extensions = Array.isArray(fileType.ext) ? fileType.ext : [fileType.ext];
+        const count = countFiles(rootDir, extensions);
+        if (count > 0) {
+            console.log(\`   📄 \${fileType.name}: \${count} archivos\`);
+        }
+    }
+    
+    // Tamaño total
+    const totalSize = getDirectorySize(rootDir);
+    console.log(\`\\n💾 TAMAÑO TOTAL DEL PROYECTO: \${formatBytes(totalSize)}\`);
+    
+    // Información de package.json
+    console.log('\\n📦 INFORMACIÓN DEL PAQUETE:');
+    try {
+        const packageJson = require(path.join(rootDir, 'package.json'));
+        console.log(\`   Nombre: \${packageJson.name}\`);
+        console.log(\`   Versión: \${packageJson.version}\`);
+        console.log(\`   Dependencias: \${Object.keys(packageJson.dependencies || {}).length}\`);
+        console.log(\`   Dev Dependencias: \${Object.keys(packageJson.devDependencies || {}).length}\`);
+        console.log(\`   Scripts disponibles: \${Object.keys(packageJson.scripts || {}).length}\`);
+    } catch (error) {
+        console.log(\`   ❌ Error leyendo package.json: \${error.message}\`);
+    }
+    
+    console.log('\\n🎉 ¡Estadísticas generadas exitosamente!');
+    console.log('\\n🚀 Comandos útiles:');
+    console.log('   npm start          - Iniciar servidor');
+    console.log('   npm run health     - Verificar salud del sistema');
+    console.log('   npm run backup     - Crear backup');
+    console.log('   npm run setup      - Reconfigurar sistema');
+    
+} catch (error) {
+    console.error('❌ Error generando estadísticas:', error);
+    process.exit(1);
+}`;
+    
+    fs.writeFileSync(statsPath, stats);
+    console.log('✅ stats.js creado en scripts/');
+    
+    // Hacer ejecutable
+    fs.chmodSync(statsPath, '755');
 }
 
 console.log('\n🎉 ¡Configuración completada exitosamente!');
@@ -1820,21 +1366,34 @@ console.log('\n📋 Resumen del sistema creado:');
 console.log('   🎭 Sistema de encriptación de 3 capas');
 console.log('   🌍 Sistema de traducción (14 idiomas)');
 console.log('   🔐 Autenticación avanzada con JWT');
-console.log('   👥 Gestión de sesiones jerárquica');
 console.log('   🐍 Integración Python completa');
 console.log('   🎨 Interfaz minimalista moderna');
 console.log('   📊 Sistema de logs y auditoría');
 console.log('   🛡️  Seguridad avanzada (Sneaker)');
 console.log('\n🚀 Próximos pasos:');
 console.log('   1. 💻 npm install');
-console.log('   2. 🐍 npm run check-python (opcional)');
+console.log('   2. 🐍 node scripts/check-python.js (opcional)');
 console.log('   3. ⚙️  Editar .env si es necesario');
-console.log('   4. 🚀 npm start');
+console.log('   4. 🏥 node scripts/health-check.js');
+console.log('   5. 🚀 npm start');
 console.log('\n🔐 Credenciales demo:');
 console.log('   👤 admin_nova / admin123 (Administrador)');
 console.log('   👤 engineer_alpha / engineer123 (Ingeniero)');
 console.log('   👤 intel_shadow / intel123 (Inteligencia)');
 console.log('\n🌍 Acceso: http://localhost:3000');
+
+// Verificar que scripts/ existe
+const scriptsDir = path.join(__dirname, '..', 'scripts');
+if (!fs.existsSync(scriptsDir)) {
+    fs.mkdirSync(scriptsDir, { recursive: true });
+    console.log('📁 Carpeta scripts/ creada');
+}
+
+console.log('\n📁 Contenido de scripts/:');
+const scriptFiles = fs.readdirSync(scriptsDir);
+scriptFiles.forEach(file => {
+    console.log(`   📄 ${file}`);
+});
 
 // Intentar instalar dependencias
 try {
@@ -1845,9 +1404,6 @@ try {
         env: { ...process.env, NODE_ENV: 'development' }
     });
     console.log('✅ Dependencias Node.js instaladas');
-    
-    console.log('\n🐍 Nota: Para dependencias Python, ejecuta:');
-    console.log('   cd scripts && node install-python-deps.js');
     
 } catch (error) {
     console.log('⚠️  No se pudieron instalar dependencias automáticamente');

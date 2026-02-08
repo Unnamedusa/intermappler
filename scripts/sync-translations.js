@@ -8,43 +8,66 @@ console.log(chalk.blue.bold('🔄 Sincronizando traducciones...\n'));
 
 async function syncTranslations() {
     try {
-        // Cargar translator.js existente
-        const translatorPath = path.join(__dirname, '..', 'base', 'utils', 'translator.js');
-        if (!await fs.pathExists(translatorPath)) {
-            console.error(chalk.red('❌ translator.js no encontrado'));
-            return false;
-        }
-        
-        // Leer translator.js para extraer traducciones
-        const translatorContent = await fs.readFile(translatorPath, 'utf8');
-        
-        // Extraer el objeto de traducciones (simplificado)
-        // En una implementación real usarías un parser más sofisticado
-        const translationMatch = translatorContent.match(/const translations = ({[\s\S]*?});/);
-        if (!translationMatch) {
-            console.error(chalk.red('❌ No se encontraron traducciones en translator.js'));
-            return false;
-        }
-        
-        // Actualizar archivos de traducción JSON
         const localesDir = path.join(__dirname, '..', 'locales');
-        if (!await fs.pathExists(localesDir)) {
-            console.log(chalk.yellow('📁 Creando directorio locales/'));
-            await fs.ensureDir(localesDir);
+        await fs.ensureDir(localesDir);
+        
+        // Verificar si ya hay archivos de traducción
+        const files = await fs.readdir(localesDir);
+        const translationFiles = files.filter(f => f.endsWith('.json') && f !== 'config.json');
+        
+        if (translationFiles.length > 0) {
+            console.log(chalk.green(`✅ ${translationFiles.length} archivos de traducción encontrados`));
+            
+            // Crear índice actualizado
+            await createTranslationIndex();
+            
+        } else {
+            console.log(chalk.yellow('ℹ️  No se encontraron archivos de traducción'));
+            console.log(chalk.cyan('💡 Ejecuta: npm run translate:extract primero'));
         }
         
-        console.log(chalk.green('✅ Traducciones sincronizadas'));
-        console.log(chalk.cyan('\n📝 Para traducciones más avanzadas:'));
-        console.log('   1. Usa el script generate-translations.js');
-        console.log('   2. Edita los archivos JSON en locales/');
-        console.log('   3. Usa un servicio de traducción profesional');
-        
+        console.log(chalk.green('\n✅ Sincronización completada'));
         return true;
         
     } catch (error) {
         console.error(chalk.red('\n❌ Error sincronizando traducciones:'), error);
         return false;
     }
+}
+
+async function createTranslationIndex() {
+    const localesDir = path.join(__dirname, '..', 'locales');
+    const indexPath = path.join(localesDir, 'index.js');
+    
+    const indexContent = `// Índice de traducciones - Generado automáticamente
+module.exports = {
+    availableLanguages: ['es', 'en', 'fr', 'de', 'it', 'pt', 'ru', 'zh', 'ja', 'ko', 'ar', 'hi', 'he', 'fa'],
+    defaultLanguage: 'es',
+    fallbackLanguage: 'en',
+    
+    getTranslations: async function(lang = 'es') {
+        try {
+            const path = require('path');
+            const fs = require('fs').promises;
+            
+            const filePath = path.join(__dirname, \`\${lang}.json\`);
+            const data = await fs.readFile(filePath, 'utf8');
+            return JSON.parse(data);
+        } catch (error) {
+            // Fallback a español
+            try {
+                const esPath = path.join(__dirname, 'es.json');
+                const data = await fs.readFile(esPath, 'utf8');
+                return JSON.parse(data);
+            } catch (fallbackError) {
+                return {};
+            }
+        }
+    }
+};`;
+    
+    await fs.writeFile(indexPath, indexContent);
+    console.log(chalk.green('✅ index.js actualizado'));
 }
 
 if (require.main === module) {
