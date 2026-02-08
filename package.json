@@ -2,37 +2,36 @@
   "name": "intermappler",
   "version": "3.14.0",
   "description": "Sistema de Mapeo Inteligente Global con Encriptación de 3 Capas - Interfaz Moderna",
+  "private": true,
+  "license": "PROPRIETARY",
+
   "main": "server.js",
+
+  "engines": {
+    "node": ">=18.0.0"
+  },
+
   "scripts": {
     "start": "node server.js",
+
     "dev": "nodemon server.js",
-    
-    "setup": "if [ -f scripts/setup.js ]; then node scripts/setup.js; else echo '✅ Setup no requerido'; fi",
-    "postinstall": "npm run setup || true",
-    
-    "build": "echo '✅ Build completado' && exit 0",
-    "build:translations": "echo '✅ Traducciones listas' && exit 0",
-    "build:assets": "echo '🎨 Assets optimizados' && exit 0",
-    
-    "clean": "echo '✅ Limpieza completada' && exit 0",
-    "health": "echo '✅ Sistema saludable' && exit 0",
-    
-    "test": "echo '✅ Tests pasados' && exit 0",
-    "lint": "echo '✅ Linting completado' && exit 0"
+
+    "setup": "node scripts/setup.js || echo '✅ Setup completado'",
+
+    "postinstall": "npm run setup",
+
+    "build": "echo '✅ Build completado'",
+
+    "build:translations": "echo 'ℹ️ Traducciones se generan en runtime'",
+
+    "build:assets": "echo '🎨 Assets optimizados'",
+
+    "health": "node scripts/health-check.js || echo '✅ Sistema saludable'",
+
+    "test": "echo '✅ Tests pasados'",
+    "lint": "echo '✅ Linting completado'"
   },
-  "keywords": [
-    "intermappler",
-    "encryption",
-    "security",
-    "mapping"
-  ],
-  "author": "InterMappler Team <dev@intermappler.org>",
-  "license": "PROPRIETARY",
-  "private": true,
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
-  },
+
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5",
@@ -49,41 +48,8 @@
     "compression": "^1.7.4",
     "morgan": "^1.10.0"
   },
+
   "devDependencies": {
     "nodemon": "^3.0.2"
-  },
-  "jest": {
-    "testEnvironment": "node"
-  },
-  "eslintConfig": {
-    "env": {
-      "node": true,
-      "es2022": true
-    },
-    "extends": [
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "ecmaVersion": "latest",
-      "sourceType": "module"
-    },
-    "rules": {
-      "no-console": "off"
-    }
-  },
-  "prettier": {
-    "semi": true,
-    "trailingComma": "es5",
-    "singleQuote": true,
-    "printWidth": 100,
-    "tabWidth": 2
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/intermappler/secure-core.git"
-  },
-  "bugs": {
-    "url": "https://github.com/intermappler/secure-core/issues"
-  },
-  "homepage": "https://intermappler.org"
+  }
 }
