@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermappler - Iniciar Sesión</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺️</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <!-- Header con controles y branding -->
+        <header class="header">
+            <div class="brand">
+                <div class="logo">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span class="logo-text">Intermappler</span>
+                </div>
+                <div class="tagline">Mapeo Inteligente Avanzado</div>
+            </div>
+            
+            <div class="header-controls">
+                <div class="language-selector">
+                    <select id="languageSelect" class="language-dropdown" aria-label="Seleccionar idioma">
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="en">🇺🇸 English</option>
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="de">🇩🇪 Deutsch</option>
+                        <option value="pt">🇵🇹 Português</option>
+                    </select>
+                </div>
+                
+                <div class="theme-toggle">
+                    <button id="themeToggle" class="theme-btn" aria-label="Cambiar tema">
+                        <i class="fas fa-moon"></i>
+                        <span class="theme-text">Modo Oscuro</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <div class="login-wrapper">
+                <!-- Panel izquierdo - Información de la plataforma -->
+                <div class="platform-info">
+                    <div class="platform-header">
+                        <h1 class="platform-title">
+                            <span class="highlight">Intermappler</span>
+                            <span class="subtitle">Plataforma de Mapeo Inteligente</span>
+                        </h1>
+                    </div>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h3>IA Geoespacial</h3>
+                            <p>Análisis predictivo con inteligencia artificial para mapeo avanzado</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <h3>Capas Inteligentes</h3>
+                            <p>Visualización multicapa con datos en tiempo real</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-satellite"></i>
+                            </div>
+                            <h3>Satélite en Vivo</h3>
+                            <p>Imágenes satelitales actualizadas y análisis detallado</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-network"></i>
+                            </div>
+                            <h3>Redes Complejas</h3>
+                            <p>Mapeo de redes y conexiones con algoritmos optimizados</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-container">
+                        <div class="stat">
+                            <span class="stat-number">15M+</span>
+                            <span class="stat-label">Puntos Mapeados</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">2.5K</span>
+                            <span class="stat-label">Capas Activas</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">99.8%</span>
+                            <span class="stat-label">Precisión IA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel derecho - Formulario de login -->
+                <div class="login-form-container">
+                    <div class="login-card">
+                        <div class="form-header">
+                            <h2>Iniciar Sesión</h2>
+                            <p>Accede a la plataforma de mapeo inteligente</p>
+                        </div>
+                        
+                        <form id="loginForm" class="login-form">
+                            <div class="input-group">
+                                <label for="email">
+                                    <i class="fas fa-user"></i>
+                                    <span>Correo Electrónico</span>
+                                </label>
+                                <input type="email" id="email" name="email" placeholder="usuario@intermappler.com" required>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="password">
+                                    <i class="fas fa-lock"></i>
+                                    <span>Contraseña</span>
+                                </label>
+                                <div class="password-wrapper">
+                                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                                    <button type="button" id="togglePassword" class="password-toggle">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="form-options">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="rememberMe">
+                                    <span class="checkmark"></span>
+                                    Recordar sesión
+                                </label>
+                                <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+                            </div>
+                            
+                            <button type="submit" class="login-btn">
+                                <i class="fas fa-sign-in-alt"></i>
+                                <span>Acceder a Intermappler</span>
+                            </button>
+                            
+                            <div class="divider">
+                                <span>o continuar con</span>
+                            </div>
+                            
+                            <div class="social-login">
+                                <button type="button" class="social-btn google">
+                                    <i class="fab fa-google"></i>
+                                    <span>Google</span>
+                                </button>
+                                <button type="button" class="social-btn github">
+                                    <i class="fab fa-github"></i>
+                                    <span>GitHub</span>
+                                </button>
+                                <button type="button" class="social-btn microsoft">
+                                    <i class="fab fa-microsoft"></i>
+                                    <span>Microsoft</span>
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div class="form-footer">
+                            <p>¿Nuevo en Intermappler? <a href="#" class="register-link">Solicitar acceso</a></p>
+                            <p class="demo-info">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Prueba con: demo@intermappler.com / demo123</span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="security-notice">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Protegido con encriptación AES-256 y autenticación 2FA</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#">Términos de Servicio</a>
+                    <a href="#">Política de Privacidad</a>
+                    <a href="#">Documentación</a>
+                    <a href="#">API</a>
+                    <a href="#">Soporte</a>
+                </div>
+                <div class="copyright">
+                    © 2024 Intermappler Technologies. Plataforma de Mapeo Inteligente v3.2.1
+                </div>
+                <div class="status-indicator">
+                    <span class="status-dot online"></span>
+                    <span>Sistema Operativo</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/js/theme.js"></script>
+    <script src="/js/language.js"></script>
+    <script src="/js/login.js"></script>
+</body>
+</html>
