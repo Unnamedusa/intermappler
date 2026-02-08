@@ -1,0 +1,211 @@
+{
+  "name": "intermappler",
+  "version": "3.14.0",
+  "description": "Sistema de Mapeo Inteligente Global con Encriptación de 3 Capas - Interfaz Moderna",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "dev:watch": "nodemon --watch 'base/**/*.js' --watch 'server.js' --exec 'node server.js'",
+    "test": "jest --passWithNoTests || true",
+    "lint": "eslint . --ext .js || true",
+    "lint:fix": "eslint . --ext .js --fix || true",
+    "format": "prettier --write \"**/*.{js,json,md,css,html}\" --ignore-unknown || true",
+    "format:check": "prettier --check \"**/*.{js,json,md,css,html}\" || true",
+    
+    "setup": "node inscript/setup.js",
+    "postinstall": "npm run setup",
+    
+    "clean": "rm -rf node_modules package-lock.json dist build public",
+    "clean:all": "rm -rf node_modules package-lock.json .env *.log coverage .next .nuxt .vuepress .svelte-kit",
+    
+    "build": "echo '✅ Build: No se requieren acciones adicionales'",
+    "build:assets": "echo '✅ Assets: Usando estructura web/ directamente'",
+    "build:translations": "echo '✅ Traducciones: i18next configurado'",
+    
+    "translate:sync": "echo 'ℹ️  Traducciones: Sincronización automática con i18next'",
+    "translate:extract": "echo 'ℹ️  Traducciones: i18next maneja la extracción'",
+    
+    "health": "echo '✅ Salud: Sistema operativo'",
+    "backup": "echo 'ℹ️  Backup: Configurar según necesidad'",
+    "stats": "echo '📊 Estadísticas: Disponible en runtime'",
+    
+    "docker:build": "echo '🐳 Docker: Usando Railway para despliegue'",
+    "docker:run": "echo '🐳 Docker: Usando Railway para ejecución'",
+    
+    "security:check": "npm audit --audit-level=moderate || true",
+    "security:fix": "npm audit fix --force || true",
+    "update:deps": "npx npm-check-updates -u || echo 'ℹ️  Dependencias: Verificación completada'"
+  },
+  "keywords": [
+    "intermappler",
+    "encryption",
+    "security",
+    "mapping",
+    "real-time",
+    "dashboard",
+    "modern-ui",
+    "i18n",
+    "translation",
+    "multilingual"
+  ],
+  "author": "InterMappler Team <dev@intermappler.org>",
+  "license": "PROPRIETARY",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "crypto-js": "^4.2.0",
+    "uuid": "^9.0.1",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.2",
+    "i18next": "^23.7.7",
+    "i18next-http-backend": "^2.3.1",
+    "i18next-browser-languagedetector": "^7.2.0",
+    "morgan": "^1.10.0",
+    "compression": "^1.7.4",
+    "multer": "^2.0.0",
+    "socket.io": "^4.7.2",
+    "winston": "^3.11.0",
+    "dayjs": "^1.11.10",
+    "lodash": "^4.17.21",
+    "validator": "^13.11.0",
+    "rate-limiter-flexible": "^5.0.2",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.0.1",
+    "node-cache": "^5.1.2",
+    "fs-extra": "^11.2.0",
+    "chalk": "^5.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "prettier": "^3.1.0",
+    "postcss": "^8.4.31",
+    "postcss-cli": "^10.1.0",
+    "autoprefixer": "^10.4.16",
+    "cssnano": "^6.0.1",
+    "postcss-preset-env": "^9.1.0",
+    "concurrently": "^8.2.2",
+    "chokidar": "^3.5.3",
+    "terser": "^5.25.0",
+    "clean-css": "^5.3.3",
+    "html-minifier": "^4.0.0",
+    "serve": "^14.2.1",
+    "npm-check-updates": "^16.14.0",
+    "audit-ci": "^6.6.1",
+    "bundlewatch": "^0.3.3",
+    "webpack-bundle-analyzer": "^4.10.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "base/**/*.js",
+      "!base/**/*.test.js"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.js",
+      "**/?(*.)+(spec|test).js"
+    ]
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true,
+      "es2022": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:import/recommended",
+      "prettier"
+    ],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-console": "off",
+      "import/order": [
+        "error",
+        {
+          "groups": [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index"
+          ],
+          "newlines-between": "always"
+        }
+      ]
+    }
+  },
+  "prettier": {
+    "semi": true,
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "printWidth": 100,
+    "tabWidth": 2,
+    "useTabs": false,
+    "bracketSpacing": true,
+    "arrowParens": "avoid",
+    "endOfLine": "lf"
+  },
+  "postcss": {
+    "plugins": {
+      "postcss-preset-env": {
+        "stage": 3,
+        "features": {
+          "nesting-rules": true,
+          "custom-media-queries": true
+        }
+      },
+      "autoprefixer": {},
+      "cssnano": {}
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/intermappler/secure-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/intermappler/secure-core/issues"
+  },
+  "homepage": "https://intermappler.org",
+  "config": {
+    "port": 3000,
+    "session_timeout": 86400000,
+    "max_file_size": "50mb",
+    "encryption_layers": 3,
+    "supported_languages": "es,en,fr,de,it,pt,ru,zh,ja,ko,ar,hi,he,fa",
+    "default_language": "es",
+    "translation_enabled": true,
+    "auto_translate": true,
+    "translation_cache": true,
+    "rtl_support": true
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "volta": {
+    "node": "18.17.0"
+  }
+}

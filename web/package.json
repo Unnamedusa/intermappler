@@ -1,0 +1,86 @@
+{
+  "name": "intermappler-web",
+  "version": "3.14.0",
+  "description": "Frontend Moderno de InterMappler con Interfaz Minimalista",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev-server.js",
+    "build": "node scripts/build.js",
+    "build:css": "postcss assets/css/**/*.css -o dist/css/bundle.min.css --map",
+    "build:js": "node scripts/bundle-js.js",
+    "watch:css": "postcss assets/css/**/*.css -o dist/css/bundle.min.css --map --watch",
+    "watch:js": "node scripts/watch-js.js",
+    "watch": "concurrently \"npm run watch:css\" \"npm run watch:js\"",
+    "lint": "eslint . --ext .js --ignore-path .gitignore || true",
+    "lint:fix": "eslint . --ext .js --fix --ignore-path .gitignore || true",
+    "format": "prettier --write \"**/*.{js,json,md,css,html}\" --ignore-path .gitignore || true",
+    "preview": "serve dist -p 8080",
+    "analyze": "node scripts/analyze-bundle.js",
+    "test:visual": "node scripts/visual-test.js",
+    "generate:icons": "node scripts/generate-icons.js",
+    "optimize:images": "node scripts/optimize-images.js"
+  },
+  "dependencies": {
+    "i18next": "^23.7.7",
+    "i18next-http-backend": "^2.3.1",
+    "i18next-browser-languagedetector": "^7.2.0",
+    "axios": "^1.6.2",
+    "particles.js": "^2.0.0",
+    "vanilla-tilt": "^1.8.0"
+  },
+  "devDependencies": {
+    "postcss": "^8.4.31",
+    "postcss-cli": "^10.1.0",
+    "autoprefixer": "^10.4.16",
+    "cssnano": "^6.0.1",
+    "postcss-import": "^15.1.0",
+    "postcss-preset-env": "^9.1.0",
+    "postcss-nested": "^6.0.1",
+    "esbuild": "^0.19.5",
+    "chokidar": "^3.5.3",
+    "browser-sync": "^2.29.3",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.55.0",
+    "prettier": "^3.1.0",
+    "serve": "^14.2.1",
+    "sharp": "^0.33.1",
+    "color": "^4.2.3",
+    "cssstats": "^3.4.0",
+    "purgecss": "^5.0.0"
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all",
+    "safari >= 12",
+    "ios_saf >= 12"
+  ],
+  "prettier": {
+    "semi": true,
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "printWidth": 100,
+    "tabWidth": 2,
+    "useTabs": false,
+    "bracketSpacing": true,
+    "arrowParens": "avoid"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2022": true
+    },
+    "extends": ["eslint:recommended"],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-console": ["warn", { "allow": ["warn", "error"] }]
+    }
+  }
+}
