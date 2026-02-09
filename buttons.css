@@ -1,0 +1,35 @@
+/* Asegurar que botones de control estén por encima del mapa */
+.map-controls .control-btn {
+    position: relative;
+    z-index: 210; /* Mayor que el z-index del mapa */
+}
+
+/* Sidebar por encima del mapa */
+.sidebar {
+    width: 280px;
+    background: var(--overlay-dark);
+    border-right: 2px solid var(--border-dark);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: var(--z-sidebar); /* 100, más alto que el mapa */
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* Top bar por encima del mapa */
+.top-bar {
+    height: 60px;
+    background: var(--overlay-dark);
+    border-bottom: 2px solid var(--border-dark);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-lg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: var(--z-topbar); /* 200, más alto que el mapa */
+    flex-shrink: 0;
+}

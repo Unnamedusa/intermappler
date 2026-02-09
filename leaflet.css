@@ -1,0 +1,14 @@
+/* Controles nativos de Leaflet con z-index apropiado */
+.leaflet-top,
+.leaflet-bottom {
+    z-index: 25 !important; /* Mayor que el mapa pero menor que los paneles */
+}
+
+.leaflet-control {
+    z-index: 25 !important;
+}
+
+/* Asegurar que los popups no se escondan detrás de controles */
+.leaflet-popup {
+    z-index: 50 !important;
+}

@@ -1,0 +1,33 @@
+/* Capa base del mapa con z-index más bajo */
+.map-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    z-index: var(--z-map); /* Ahora es 10 */
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Nivel más bajo dentro del contenedor */
+}
+
+/* Asegurar que las capas del mapa no superen controles */
+.leaflet-map-pane,
+.leaflet-tile-pane,
+.leaflet-overlay-pane {
+    z-index: 1 !important;
+}
+
+/* Controles del mapa con z-index más alto */
+.leaflet-control-container {
+    z-index: 20 !important;
+}
+
+/* Capas base del mapa con z-index controlado */
+.leaflet-layer {
+    z-index: 1 !important;
+}
