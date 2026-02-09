@@ -1,0 +1,22 @@
+[build]
+builder = "nixpacks"
+buildCommand = "npm install"
+
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/status"
+healthcheckTimeout = 30
+restartPolicyType = "on-failure"
+
+[variables]
+NODE_ENV = "production"
+PORT = "3000"
+
+# Configuración de red - Solo interno
+[networks]
+[[networks.ports]]
+port = 3000
+http = true
+# Solo interno, no expuesto públicamente
+scope = "internal"
+protocol = "tcp"
