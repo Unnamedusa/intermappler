@@ -19,7 +19,7 @@ const ALLOW_LOCALHOST = true; // Permitir acceso desde localhost
 // Lista de IPs permitidas (agrega más si necesitas)
 const ALLOWED_IPS = new Set([
   YOUR_IP_ADDRESS,
-  '127.0.0.1',
+  '100.64.0.2',
   'localhost',
   '::1',
   '::ffff:127.0.0.1'
