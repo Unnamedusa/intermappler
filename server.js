@@ -32,13 +32,24 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-// Rate limiting
+// Health check endpoint for Railway (antes del rate limiting)
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'Server is running',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
+// Rate limiting (excluye /health)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => req.path === '/health' // Skip rate limiting for health check
 });
 
 const apiLimiter = rateLimit({
@@ -86,16 +97,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // API Routes
 const mapRoutes = require('./routes/mapRoutes');
 app.use('/api/maps', mapRoutes);
-
-// Health check endpoint for Railway
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    message: 'Server is running',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime()
-  });
-});
 
 // Main route
 app.get('/', (req, res) => {

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta name="description" content="InterMappler Ultimate - Advanced Interactive Mapping Application">
+    <title>InterMappler Ultimate v10.0</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>🗺️ InterMappler Ultimate</h1>
+            <div class="header-actions">
+                <span class="version">v10.0</span>
+                <button id="themeToggle" class="btn-icon" title="Toggle Theme">🌓</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Control Panel</h2>
+            <button id="sidebarToggle" class="btn-icon">✕</button>
+        </div>
+
+        <!-- Search Section -->
+        <section class="panel">
+            <h3>🔍 Search Location</h3>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search for a place..." class="input">
+                <button id="searchBtn" class="btn btn-primary">Search</button>
+            </div>
+            <div id="searchResults" class="search-results"></div>
+        </section>
+
+        <!-- Add Marker Section -->
+        <section class="panel">
+            <h3>📍 Add Marker</h3>
+            <form id="markerForm">
+                <input type="text" id="markerTitle" placeholder="Title" class="input" required>
+                <textarea id="markerDesc" placeholder="Description (optional)" class="input" rows="3"></textarea>
+                <select id="markerType" class="input">
+                    <option value="default">Default</option>
+                    <option value="important">Important</option>
+                    <option value="warning">Warning</option>
+                    <option value="info">Info</option>
+                </select>
+                <button type="submit" class="btn btn-success">Add Marker</button>
+            </form>
+        </section>
+
+        <!-- Layers Section -->
+        <section class="panel">
+            <h3>🗂️ Layers</h3>
+            <div class="layer-controls">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="clusteringToggle" checked>
+                    <span>Marker Clustering</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="heatmapToggle">
+                    <span>Heatmap</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="drawToggle">
+                    <span>Drawing Tools</span>
+                </label>
+            </div>
+        </section>
+
+        <!-- Routing Section -->
+        <section class="panel">
+            <h3>🛣️ Routing</h3>
+            <button id="startRouting" class="btn btn-primary">Start Route Planning</button>
+            <button id="clearRoute" class="btn btn-secondary" style="display:none;">Clear Route</button>
+            <div id="routeInfo" class="route-info"></div>
+        </section>
+
+        <!-- Export Section -->
+        <section class="panel">
+            <h3>💾 Export Data</h3>
+            <div class="export-buttons">
+                <button id="exportJSON" class="btn btn-secondary">Export JSON</button>
+                <button id="exportGeoJSON" class="btn btn-secondary">Export GeoJSON</button>
+                <button id="exportCSV" class="btn btn-secondary">Export CSV</button>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="panel">
+            <h3>📊 Statistics</h3>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">Markers:</span>
+                    <span class="stat-value" id="markerCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Routes:</span>
+                    <span class="stat-value" id="routeCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Drawings:</span>
+                    <span class="stat-value" id="drawingCount">0</span>
+                </div>
+            </div>
+        </section>
+    </aside>
+
+    <!-- Main Map -->
+    <main class="main-content">
+        <div id="map"></div>
+        
+        <!-- Map Controls -->
+        <div class="map-controls">
+            <button id="locateMe" class="btn-icon map-btn" title="My Location">📍</button>
+            <button id="fullscreen" class="btn-icon map-btn" title="Fullscreen">⛶</button>
+            <button id="measureToggle" class="btn-icon map-btn" title="Measure Distance">📏</button>
+        </div>
+
+        <!-- Coordinates Display -->
+        <div class="coordinates-display" id="coordsDisplay">
+            Lat: 0.0000, Lng: 0.0000
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="/js/utils.js"></script>
+    <script src="/js/map.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
